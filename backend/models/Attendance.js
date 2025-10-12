@@ -17,9 +17,11 @@ module.exports = (sequelize, DataTypes) => {
         student_id: {
             type: DataTypes.INTEGER,
             allowNull: false,
-        },
-
+        }, 
+    }, {
+        freezeTableName: true,
+        timestamps: false
     });
     return Attendance;
 
-}
+};

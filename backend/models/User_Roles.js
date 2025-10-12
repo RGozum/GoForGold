@@ -9,8 +9,11 @@ module.exports = (sequelize, DataTypes) => {
         user_role: {
             type: DataTypes.STRING,
             allowNull: false,
-        },
+        }, 
+    }, {
+        freezeTableName: true,
+        timestamps: false
     });
     return UserRoles;
 
-}
+};

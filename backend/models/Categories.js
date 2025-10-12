@@ -1,8 +1,8 @@
+
 module.exports = (sequelize, DataTypes) => {
-    const Categories = sequelize.define("Categories", {
+    const Categories = sequelize.define('Categories', {
         category_id: {
             type: DataTypes.INTEGER,
-            allowNull: false,
             primaryKey: true,
             autoIncrement: true,
         },
@@ -13,9 +13,11 @@ module.exports = (sequelize, DataTypes) => {
         active: {
             type: DataTypes.BOOLEAN,
             allowNull: false,
-        },
-
+            defaultValue: true,
+        }, 
+    }, {
+        freezeTableName: true,
+        timestamps: false
     });
     return Categories;
-
-}
+};

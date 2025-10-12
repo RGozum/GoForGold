@@ -25,13 +25,16 @@ module.exports = (sequelize, DataTypes) => {
         active: {
             type: DataTypes.BOOLEAN,
             allowNull: false,
+            defaultValue: true,
         },
         password: {
             type: DataTypes.STRING,
             allowNull: false,
-        },
-
+        }, 
+    }, {
+        freezeTableName: true,
+        timestamps: false
     });
     return Users;
 
-}
+};

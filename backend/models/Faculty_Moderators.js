@@ -1,10 +1,10 @@
 module.exports = (sequelize, DataTypes) => {
-    const StudentEnrollment = sequelize.define("StudentEnrollment", {
-        student_id: {
+    const FacultyModerators = sequelize.define("FacultyModerators", {
+        faculty_id: {
             type: DataTypes.INTEGER,
             allowNull: false,
         },
-        activities_Id: {
+        activity_moderating_id: {
             type: DataTypes.INTEGER,
             allowNull: false,
         }, 
@@ -12,6 +12,6 @@ module.exports = (sequelize, DataTypes) => {
         freezeTableName: true,
         timestamps: false
     });
-    return StudentEnrollment;
+    return FacultyModerators;
 
 };

@@ -9,8 +9,11 @@ module.exports = (sequelize, DataTypes) => {
         name: {
             type: DataTypes.STRING,
             allowNull: false,
-        },
+        }, 
+    }, {
+        freezeTableName: true,
+        timestamps: false
     });
     return SchoolYears;
 
-}
+};

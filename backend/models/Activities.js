@@ -17,13 +17,16 @@ module.exports = (sequelize, DataTypes) => {
         active: {
             type: DataTypes.BOOLEAN,
             allowNull: false,
+            defaultValue: true,
         },
         year_id: {
             type: DataTypes.INTEGER,
             allowNull: false,
-        },
-
+        }, 
+    }, {
+        freezeTableName: true,
+        timestamps: false
     });
     return Activities;
 
-}
+};

@@ -21,9 +21,11 @@ module.exports = (sequelize, DataTypes) => {
         grade: {
             type: DataTypes.INTEGER,
             allowNull: false,
-        },
-
+        }, 
+    }, {
+        freezeTableName: true,
+        timestamps: false
     });
     return HonorList;
 
-}
+};
