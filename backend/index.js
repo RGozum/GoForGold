@@ -24,7 +24,7 @@ const sequelize = new Sequelize(
 app.use(express.json());
 
 
-// Routers
+// Routers for categories
 const categoryRouter = require('./routes/Categories');
 app.use("/Categories",categoryRouter);
 

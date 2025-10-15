@@ -1,18 +1,27 @@
 const express = require('express');
 const router = express.Router();
-const { Activities } = require('../models')(sequelize, DataTypes);;
+const { Activities } = require('../models');
 
-router.get("/", (req, res) => {
-    res.send("Hello World!")
+router.get("/", async(req, res) => {
+    const listOfAcivities = await Activities.findAll();
+    res.json(listOfAcivities);
 });
 
 router.post("/", async (req,rest) => {
     const post = req.body;
-    await Activities.create(post);
-    res.json(post);
+    const newActivity = await Activities.create(post);
+    res.json(newActivity);
+});
+
+router.put("/:id/archive", async(req,res) => {
+    const {activity_id} = req.params;
+    const activity = await Activities.findByPk(activity_id);
+    if (!activity) return res.status(404).json({message: "Not found"})
+
+    category.active = false;
+    await category.save();
+    res.json(category);
 })
-
-
 
 
 module.exports = router;

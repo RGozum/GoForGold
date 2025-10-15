@@ -12,6 +12,8 @@ const [newCategory, setNewCategory] = useState("");
         setCategories(response.data);
     };
 
+    
+
      useEffect(() => {
             fetchCategories();
     }, []);
@@ -22,9 +24,16 @@ const [newCategory, setNewCategory] = useState("");
                 Categories
             </h3>
             <ul>
-                <li>
+                {categories.map((cat) => (
+                <li key={cat.category_index} className="category">
+                    <span className="line">
+                    {cat.category_name}
+                    </span>
+                    <div className="gap"></div>
                     
                 </li>
+                ))}
+               
             </ul>
         </div>
     );
