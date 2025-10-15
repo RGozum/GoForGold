@@ -20,7 +20,7 @@ export default function AdminHeader() {
     const [open, setOpen] = useState(false);
 
     return <nav className="nav">
-        <a href ="/" classNme="site-title">Go For Gold!</a>
+        <a href ="/" className="site-title">Go For Gold!</a>
         <ul>
             <li>
              <a href ="/adminpanel">Admin Panel </a>
@@ -33,7 +33,8 @@ export default function AdminHeader() {
                 <div className='menu-trigger' onClick={()=>{setOpen(!open)}}>
                     <img src={ProfilePictureIcon} className='pfp' width="30"></img>
                 </div>
-             </div></li>
+             </div>
+             </li>
             <li>
              <div className={`dropdown-menu ${open? 'active' : 'inactive'}`}>
                 <ul>
