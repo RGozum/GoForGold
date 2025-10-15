@@ -17,7 +17,6 @@ export default function Hello() {
   useEffect(() => {
     fetchAPI();
   }, []);
-    const name = "Roseyn";
     return (
         <div>
             <AdminHeader />
@@ -26,7 +25,6 @@ export default function Hello() {
                     <p>{cat.category_name}</p>
                 </div>
                 ))}
-            <h1>Hello {name}</h1>
         </div>
     );
 }
