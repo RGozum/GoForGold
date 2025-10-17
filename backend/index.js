@@ -25,8 +25,11 @@ app.use(express.json());
 
 
 // Routers for categories
-const categoryRouter = require('./routes/Categories');
-app.use("/Categories",categoryRouter);
+const categoryRouter = require('./routes/categories');
+app.use("/categories",categoryRouter);
+
+const activityRouter = require('./routes/activities');
+app.use("/activities",activityRouter);
 
 sequelize.authenticate().then(() => {
    console.log('Connection has been established successfully.');

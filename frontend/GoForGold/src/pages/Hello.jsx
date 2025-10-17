@@ -1,25 +1,35 @@
 import './Hello.css';
-import axios from 'axios';
-import {useState, useEffect} from "react";
 import AdminHeader from "../components/AdminHeader.jsx";
-import ScrollablePanel from "../components/ScrollablePanel.jsx";
+import AdminScrollablePanel from "../components/CategoryScrollablePanel.jsx";
+import ActivityPanel from "../components/ActivityPanel.jsx";
+import {Container, Row, Col} from 'react-bootstrap';
 
 
 export default function Hello() {
-    const [categories, setCategories] = useState([]);
-
-    const fetchAPI = async() => {
-        const response = await axios.get("http://localhost:3001/categories");
-        setCategories(response.data);
-    }
-
-  useEffect(() => {
-    fetchAPI();
-  }, []);
     return (
-        <div>
-            <AdminHeader />
-            <ScrollablePanel />
-        </div>
+
+      <div>
+        <AdminHeader />
+      </div>
+      // <div>
+      // <AdminHeader />
+      // <div>
+      //   <AdminScrollablePanel />
+      //    <ActivityPanel />
+      // </div>
+      
+      // <Container>
+      // <Row>
+      //   <Col><AdminScrollablePanel />
+      //   </Col>
+      //   <Col><ActivityPanel />
+      //   </Col>
+      // </Row>
+
+      // </Container>
+
+
+      // </div>
+
     );
 }

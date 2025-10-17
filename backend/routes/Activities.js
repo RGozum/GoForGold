@@ -7,20 +7,20 @@ router.get("/", async(req, res) => {
     res.json(listOfAcivities);
 });
 
-router.post("/", async (req,rest) => {
+router.post("/", async (req,res) => {
     const post = req.body;
     const newActivity = await Activities.create(post);
     res.json(newActivity);
 });
 
-router.put("/:id/archive", async(req,res) => {
+router.put("/:activity_id/archive", async(req,res) => {
     const {activity_id} = req.params;
     const activity = await Activities.findByPk(activity_id);
     if (!activity) return res.status(404).json({message: "Not found"})
 
-    category.active = false;
-    await category.save();
-    res.json(category);
+    activity.active = !activity.active;
+    await activity.save();
+    res.json(activity);
 })
 
 

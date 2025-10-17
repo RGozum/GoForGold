@@ -14,15 +14,16 @@ router.post("/", async (req,res) => {
     res.json(newCategory);
 });
 
-router.put("/:id/archive", async(req,res) => {
-    const {category_id} = req.params;
-    const category = await Categories.findByPk(id);
-    if (!category) return res.status(404).json({message: "Not found"})
+router.put("/:category_id/archive", async (req, res) => {
+  const { category_id } = req.params;
+  const category = await Categories.findByPk(category_id);
+  if (!category) return res.status(404).json({ message: "Not found" });
+  category.active = !category.active; 
+  await category.save();
+  res.json(category);
 
-    category.active = false;
-    await category.save();
-    res.json(category);
-})
+});
+
 
 
 module.exports = router;
