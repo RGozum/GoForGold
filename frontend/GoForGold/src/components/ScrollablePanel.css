@@ -1,7 +1,28 @@
-.container {
-    padding: 16px;
-    max-width: 400px;
+.scrollable-panel {
+    background-color:#c5c4c4;
+    max-width: 300px;
+    max-height: 300px;
     margin: 0 auto;
+    padding: 16px;
+    overflow-y: auto;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    
+}
+
+.ul-style {
+    padding: 0;
+    margin: 0;
+    list-style: none;
+}
+
+.active {
+    color: black;
+}
+
+.inactive {
+    color: rgb(148, 125, 125);
+    text-decoration: line-through;
 }
 
 .title {
@@ -21,8 +42,6 @@
     padding: 8px;
     border: 1px solid #ccc;
     border-radius: 4px;
-    
-
 }
 
 .add-button {
@@ -32,14 +51,6 @@
     cursor: pointer;
     color: #fff;
     background-color: rgb(67, 103, 167);
-}
-
-.panel {
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    height:256px;
-    overflow-y:auto;
-    background-color: #c5c4c4;
 }
 
 .scroll-item {
@@ -53,11 +64,10 @@
     box-shadow: 0 1px 2px rgba(0,0,0,0.1);
 }
 
-.item-active {
-    color: black;
-}
+ .button {
+    transition: transform 500ms ease
+ }
 
-.item-inactive {
-    color: rgb(148, 125, 125);
-    text-decoration: line-through;
-}
+ .button:hover {
+    transform: scale(1.1);
+ }

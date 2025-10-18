@@ -1,81 +1,83 @@
+import {Button, Form} from 'react-bootstrap';
+
+import {React, useEffect, useState} from 'react';
 import axios from 'axios';
-import {useState, useEffect} from "react";
+
+import AddActivityPop from './admin_pages/AddActivityPop';
+
 import './ScrollablePanel.css';
 
-export default function ScrollablePanel() {
+export default function ActivityPanel({categories, onAddActivity, globalActivities, refreshActivities}) {
 const [activities, setActivities] = useState([]);
-const [newActivity, setNewActivity] = useState("");
+const [selectedCategory, setSelectedCategory] = useState("")
 
 
-// Get categories 
-const fetchActivities = async() => {
-    const response = await axios.get("http://localhost:3001/activities");
+const fetchActivities = async (cat_id) => { 
+    if (!cat_id) return; 
+    const response = await axios.get("http://localhost:3001/activities", {
+        params: {category_id: cat_id},
+    });
     setActivities(response.data);
 };
 
- useEffect(() => {
-        fetchActivities();
-}, []);
 
-// Add category
+useEffect(() => {
+    if (categories.length >0 && selectedCategory === "") {
+        setSelectedCategory(categories[0].category_id);
+    }
+}, [categories]);
 
-// const addCategory = async () => {
-//     if (!newActivity.trim()) return;
-//     const response = await axios.post("http://localhost:3001/activities", {
-//       activity_name: newActivity,
-      
-//       active: true,
-//     });
-//     setCategories((prev) => [...prev, response.data]);
-//     setNewCategory("");
-//   };
+useEffect(() => {
+    if (!selectedCategory) return;
+    fetchActivities(selectedCategory);
+}, [selectedCategory]);
 
-
-//Archive category
-const archiveActivity = async(activity_id) => {
-    const response = await axios.put(`http://localhost:3001/activities/${activity_id}/archive`);
-    const updatedActivity = response.data;
-
-setActivities((prevActivities) =>
-    prevActivities.map((act) =>
-    act.activity_id === updatedActivity.activity_id ? updatedActivity : act)); };
+useEffect(() => {
+    if (!selectedCategory) return;
+    fetchActivities(selectedCategory);
+}, [globalActivities]);
 
 
-    return (
-        <div className="container">
-            <h3 className="title">Activities</h3>
+const archiveActivity = async (activity_id) => {
+  const response = await axios.put(`http://localhost:3001/activities/${activity_id}/archive`);
+  const updatedActivity = response.data;
 
-            {/* <div className="input-container">
-                <input 
-                    type="text"
-                    placeholder="New category..."
-                    value={newCategory}
-                    onChange={(e) => setNewCategory(e.target.value)}
-                    className="input" />
-                <button onClick={() => addCategory()} className="add-button">
-                    Add
-                </button>
-            </div> */}
+  setActivities((prevActivities) =>
+  prevActivities.map((act) =>
+    act.activity_id === updatedActivity.activity_id ? updatedActivity : act));
+}
 
-            <div className="panel">
+return (
+    <div>
+    <div className="scrollable-panel">
+    <h3 className="title">Activities</h3>
 
-            <ul style={{padding: 0, margin: 0, listStyle:"none"}}>
-                {activities.map((act) => (
-                    <li key={act.activity_id} className="scroll-item">
-                        <span 
-                            className={`${act.active ? "item-active" : "item-inactive"}`}>
-                            {act.activity_name}
-                        </span>
-                        <div style={{ display: "flex", gap: "8px"}}>
-                            <button onClick={() => archiveActivity(act.activity_id)} className="archiveButton">
-                                &times;
-                            </button>
-                        </div>
-                </li>
-                ))}
-               
-            </ul>
-        </div>
-        </div>
-    );
+    <AddActivityPop categories={categories}
+    onAdd={onAddActivity} />
+
+    <Form.Select value={selectedCategory} onChange={(e)=> setSelectedCategory(Number(e.target.value))} className="mb-2">
+        <option value="">Select a category</option>
+        {categories.map((cat) => (
+            <option key={cat.category_id} value={cat.category_id}>
+                {cat.category_name}
+            </option>
+        ))}
+    </Form.Select>
+    {activities.length===0 ? (<p>No activities found.</p>) : (
+    <ul className="ul-style">
+        {activities.map((act) => (
+            <li key = {act.activity_id} className="scroll-item">
+                <span className={`${act.active ? "active" : "inactive"}`}>
+                    {act.activity_name}
+                </span>
+                    <Button variant="dark" size="sm" onClick={() => archiveActivity(act.activity_id)} className="button">
+                    &times;
+                </Button>            
+            </li>
+        ))}
+    </ul>
+)}
+  </div>
+  </div>
+);
 }

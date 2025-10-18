@@ -9,8 +9,8 @@ router.get("/", async (req, res) => {
 });
 
 router.post("/", async (req,res) => {
-    const post = req.body;
-    const newCategory = await Categories.create(post);
+    const {category_name} = req.body;
+    const newCategory = await Categories.create({category_name});
     res.json(newCategory);
 });
 

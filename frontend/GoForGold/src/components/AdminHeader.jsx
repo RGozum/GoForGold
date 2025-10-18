@@ -16,7 +16,7 @@ export default function AdminHeader ({onLogout}) {
 
                 <Navbar.Toggle aria-controls="navbarScroll" />
                 <Navbar.Collapse id="navbarScroll">
-                    <Nav className="me-auto my-2 my-lg-0" navbarScroll>
+                    <Nav className="ms-auto d-flex align-items-center " navbarScroll>
                         <Nav.Link href="/adminpanel">Admin Panel</Nav.Link>
                         <Nav.Link href="/honorroll">Honor Roll</Nav.Link>
                         <Nav.Link href="/accountcreation">Account Creation</Nav.Link>
@@ -31,8 +31,8 @@ export default function AdminHeader ({onLogout}) {
                             <img src={ProfilePictureIcon} className="pfp"/>
                         } id="profile-dropdown" align="end">
 
-                            <NavDropdown.Item onClick={onLogout}>
-                                <img src={LogOutIcon} className="logout"/>
+                            <NavDropdown.Item onClick={onLogout} className="logout-drop">
+                                <img src={LogOutIcon} className="logout"/><div className="gap"/>
                                 Logout
                                 </NavDropdown.Item>
                         </NavDropdown>
