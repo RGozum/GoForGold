@@ -1,9 +1,8 @@
 module.exports = (sequelize, DataTypes) => {
-    const UserRoles = sequelize.define("UserRoles", {
+    const User_Role = sequelize.define("User_Role", {
         user_role_id: {
             type: DataTypes.INTEGER,
             primaryKey: true,
-            allowNull: false,
             autoIncrement: true,
         },
         user_role: {
@@ -14,6 +13,6 @@ module.exports = (sequelize, DataTypes) => {
         freezeTableName: true,
         timestamps: false
     });
-    return UserRoles;
+    return User_Role;
 
 };

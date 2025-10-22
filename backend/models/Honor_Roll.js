@@ -16,6 +16,7 @@ module.exports = (sequelize, DataTypes) => {
         year_id_fk: {
             type: DataTypes.INTEGER,
             allowNull: false,
+            default: 1,
         }, 
     }, {
         freezeTableName: true,

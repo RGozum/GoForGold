@@ -1,7 +1,7 @@
 import {Button} from 'react-bootstrap';
 
 import React from 'react';
-import AddCategoryPopUp from './admin_pages/AddCategoryPop.jsx';
+import AddCategoryPopUp from './AddCategoryPop.jsx';
 import './ScrollablePanel.css';
 
 export default function AdminScrollablePanel({categories, onToggleActive, onAddCategory }) {

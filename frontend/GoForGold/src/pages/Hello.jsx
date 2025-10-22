@@ -3,11 +3,11 @@ import {useState, useEffect} from "react";
 import axios from 'axios';
 
 
-import AdminHeader from "../components/AdminHeader.jsx";
+import AdminHeader from "../components/admin_pages/AdminHeader.jsx";
 import './Hello.css';
-import AdminScrollablePanel from "../components/AdminScrollablePanel.jsx";
-import ActivityPanel from "../components/ActivityPanel.jsx";
-import AddCategoryPopUp from '../components/admin_pages/AddCategoryPop.jsx';
+import AdminScrollablePanel from "../components/admin_pages/AdminScrollablePanel.jsx";
+import ActivityPanel from "../components/admin_pages/ActivityPanel.jsx";
+import UsersComponent from '../components/admin_pages/UsersComponent.jsx';
 
 export default function Hello() {
 const [categories, setCategories] = useState([]);
@@ -59,8 +59,10 @@ const addCategory = async (name) => {
       <div>
 
         <Container fluid="md">
-          <Row> <AdminHeader /> </Row>
-        <Row>
+          <Row className="mb-4"> 
+            <AdminHeader /> 
+            </Row>
+        <Row className="mb-3">
           <Col><AdminScrollablePanel categories={categories} onToggleActive ={archiveCategory} onAddCategory={addCategory}/>
           </Col>
           <Col> <ActivityPanel
@@ -70,6 +72,8 @@ const addCategory = async (name) => {
               refreshActivities={fetchActivities}
             />
           </Col>
+        </Row>
+        <Row><UsersComponent className="mb-3"/>
         </Row>
 
 

@@ -1,13 +1,11 @@
-import './App.css'
-import Hello from "./pages/Hello.jsx";
+// App.jsx
+import { Link, Outlet } from "react-router";
 
 function App() {
-  
   return (
-      <div>
-        <Hello />
-      </div>
-      
+    <>
+      <Outlet />
+    </>
   );
 }
 

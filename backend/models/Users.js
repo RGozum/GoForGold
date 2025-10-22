@@ -30,6 +30,7 @@ module.exports = (sequelize, DataTypes) => {
         password: {
             type: DataTypes.STRING,
             allowNull: false,
+            defaultValue: "Vianney!",
         }, 
     }, {
         freezeTableName: true,

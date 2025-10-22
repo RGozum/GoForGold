@@ -1,6 +1,19 @@
 .scrollable-panel {
     background-color:#c5c4c4;
-    max-width: 300px;
+    max-width: 450px;
+    max-height: 300px;
+    margin: 0 auto;
+    padding: 16px;
+    overflow-y: auto;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    
+}
+
+.scrollable-panel-users {
+
+   background-color:#c5c4c4;
+    max-width: 900px;
     max-height: 300px;
     margin: 0 auto;
     padding: 16px;

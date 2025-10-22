@@ -34,6 +34,9 @@ app.use("/activities",activityRouter);
 const userRouter = require('./routes/Users');
 app.use("/users",userRouter);
 
+const userRolesRouter = require('./routes/User_Roles');
+app.use("/userroles", userRolesRouter);
+
 sequelize.authenticate().then(() => {
    console.log('Connection has been established successfully.');
 }).catch((error) => {

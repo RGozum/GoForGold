@@ -3,7 +3,7 @@ import {Button, Form} from 'react-bootstrap';
 import {React, useEffect, useState} from 'react';
 import axios from 'axios';
 
-import AddActivityPop from './admin_pages/AddActivityPop';
+import AddActivityPop from './AddActivityPop';
 
 import './ScrollablePanel.css';
 
