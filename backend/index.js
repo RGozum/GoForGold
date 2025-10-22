@@ -2,9 +2,6 @@ const express = require('express');
 const app = express();
 const port = 3001;
 const cors = require('cors');
-const corsOptions = {
-    origin: ["http://localhost:5173/"],
-}
 
 const Categories = require('./models/Categories')
 

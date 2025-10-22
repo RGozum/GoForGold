@@ -1,7 +1,8 @@
-import React, {useState, useEffect} from "react";
+import React, {useState, useEffect, useRef} from "react";
 import {Container, Row, Col, Button, Form} from "react-bootstrap";
 import axios from "axios";
 import './AddUsers.css';
+import Papa from "papaparse";
 
 export default function AddUsersComponent() {
     const [userRows, setUserRows] = useState([
@@ -9,6 +10,7 @@ export default function AddUsersComponent() {
              email_address: "", user_role_id: ""}
     ]);
     const [roles, setRoles]=useState([]);
+    const fileInputRef = useRef(null);
 
  
 
@@ -52,11 +54,38 @@ export default function AddUsersComponent() {
         }
     };
 
+    const handleCSVUpload = (event) => {
+        const file = event.target.files[0];
+        if (!file) return;
+
+        Papa.parse(file, {
+            header: true,
+            complete: (results) => {
+                const parsedUsers=results.data.map((row) => ({
+                    first_name:row.first_name || "",
+                    last_name: row.last_name || "",
+                    email_address: row.email_address || "",
+                    user_role_id: row.user_role_id || "",
+                }));
+            setUserRows(parsedUsers);
+            },
+         });
+    };
+
     return (
             <Container fluid="md" className="panel">    
                 <Col className="d-flex align-items-center">
                 <h3>Create Accounts</h3>
-                <Button className="ms-auto mb-2" disabled>Import list</Button>
+                <Button className="ms-auto mb-2" onClick={() => fileInputRef.current.click()}>Import list</Button>
+
+                <Form.Control
+                type="file"
+                accept=".csv"
+                ref={fileInputRef}
+                onChange={handleCSVUpload}
+                style={{display:"none"}} />
+
+
                 </Col>
                 
                 <Form>
@@ -80,7 +109,7 @@ export default function AddUsersComponent() {
                             </Col>
                             <Col md={2}>
                                 <Form.Control
-                                    type="text"
+                                    type="email"
                                     placeholder="Email"
                                     value={user.email_address}
                                     onChange={(e) =>
