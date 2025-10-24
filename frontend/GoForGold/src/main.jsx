@@ -13,7 +13,7 @@ const router = createBrowserRouter([
     children: [
       { path: "adminpanel", element: <AdminPanel /> },
       { path: "accountcreation", element: <AccountCreation /> },
-      {path: "signup", element: <SignUp />}
+      // {path: "signup", element: <SignUp />}
     ],
   },
 ]);

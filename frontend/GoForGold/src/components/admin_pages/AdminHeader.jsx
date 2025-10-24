@@ -1,8 +1,8 @@
 import React from 'react';
 import {Navbar, Nav, Container, NavDropdown, Button, Image} from 'react-bootstrap';
-import SearchIcon from '../../assets/search.png';
-import ProfilePictureIcon from '../../assets/profilepicture.png';
-import LogOutIcon from '../../assets/logout.png';
+import SearchIcon from '../../assets/searchicon.svg';
+import ProfilePictureIcon from '../../assets/profilepictureicon.svg';
+import LogOutIcon from '../../assets/logoutpic.svg';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './AdminHeader.css'
