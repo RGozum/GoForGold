@@ -1,4 +1,4 @@
-
+const bcrypt = require('bcrypt');
 const express = require('express');
 const router = express.Router();
 const { Users } = require('../models');
@@ -13,12 +13,14 @@ router.get("/", async (req, res) => {
     res.json(listOfUsers);
 });
 
-router.post("/", async (req,res) => {
-    const {first_name,last_name,email_address,password} = req.body;
-    const newUser = await Users.create({first_name,last_name,email_address,password});
-    res.json(newUser);
-});
+// router.post("/", async (req,res) => {
+//     const {first_name,last_name,email_address,user_role_id, defaultPassword} = req.body;
+//     if (!defaultPassword) defaultPassword = "Vianney!";
+//     password = await bcrypt.hash(defaultPassword, 10);
 
+//     const newUser = await Users.create({first_name,last_name,email_address,password, user_role_id});
+//     res.json(newUser);
+// });
 
 
 router.post("/bulk", async(req,res) => {
@@ -35,7 +37,14 @@ router.post("/bulk", async(req,res) => {
       }
     }
 
-    const createdUsers = await Users.bulkCreate(users);
+    const defaultPassword= "Vianney!";
+    const hashedPassword = await bcrypt.hash(defaultPassword, 10);
+
+    const usersWithPassword = users.map((u) => ({
+      ...u, password: hashedPassword,
+    }));
+
+    const createdUsers = await Users.bulkCreate(usersWithPassword);
 
     res.status(201).json({
       message: `${createdUsers.length} users created successfully!`,
@@ -60,6 +69,16 @@ router.put("/:user_id/archive", async (req, res) => {
 
 });
 
+router.post("/login", async (req,res) => {
+  const {email_address, password } = req.body;
 
+  const user = await Users.findOne({where: {email_address:email_address}});
+
+  if (!user) return res.json({err: "No account associated with email"});
+  bcrypt.compare(password, user.password).then((match)  => {
+    if (!match) return res.json({error: "Incorrect password."});
+    return res.json("Logged in.");
+  });
+});
 
 module.exports = router;

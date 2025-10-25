@@ -2,9 +2,9 @@ module.exports = (sequelize, DataTypes) => {
     const Users = sequelize.define("Users", {
         user_id: {
             type: DataTypes.INTEGER,
-            allowNull: false,
             primaryKey: true,
-            unique: true,
+            autoIncrement: true,
+
         },
         first_name: {
             type: DataTypes.STRING,
@@ -30,7 +30,6 @@ module.exports = (sequelize, DataTypes) => {
         password: {
             type: DataTypes.STRING,
             allowNull: false,
-            defaultValue: "Vianney!",
         }, 
     }, {
         freezeTableName: true,
