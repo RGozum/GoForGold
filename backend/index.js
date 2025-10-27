@@ -1,9 +1,15 @@
+const dotenv = require('dotenv');
+dotenv.config();
+
 const express = require('express');
 const app = express();
 const port = 3001;
 const cors = require('cors');
 
 const Categories = require('./models/Categories')
+
+
+
 
 app.use(cors());
 

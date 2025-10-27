@@ -4,7 +4,7 @@ import { createBrowserRouter, RouterProvider } from "react-router";
 import App from "./App.jsx";
 import AdminPanel from "./pages/Hello.jsx";
 import AccountCreation from "./pages/AccountCreation.jsx";
-import SignUp from "./pages/SignUp.jsx";
+import LogIn from "./pages/LogIn.jsx";
 
 const router = createBrowserRouter([
   {
@@ -13,7 +13,7 @@ const router = createBrowserRouter([
     children: [
       { path: "adminpanel", element: <AdminPanel /> },
       { path: "accountcreation", element: <AccountCreation /> },
-      // {path: "signup", element: <SignUp />}
+      {path: "login", element: <LogIn />}
     ],
   },
 ]);

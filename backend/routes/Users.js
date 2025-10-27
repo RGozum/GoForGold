@@ -2,6 +2,7 @@ const bcrypt = require('bcrypt');
 const express = require('express');
 const router = express.Router();
 const { Users } = require('../models');
+const {sign} = require('jsonwebtoken');
 
 router.get("/", async (req, res) => {
     const {user_role_id} = req.query;
@@ -77,7 +78,11 @@ router.post("/login", async (req,res) => {
   if (!user) return res.json({err: "No account associated with email"});
   bcrypt.compare(password, user.password).then((match)  => {
     if (!match) return res.json({error: "Incorrect password."});
-    return res.json("Logged in.");
+    
+    const accessToken = sign({email_address: user.email_address, id:user.user_id}, 
+      process.env.JWT_KEY, {expiresIn:'3h'});
+    
+    return res.json(accessToken);
   });
 });
 
