@@ -31,6 +31,11 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.STRING,
             allowNull: false,
         }, 
+        google_id: {
+            type:DataTypes.STRING,
+            allowNull:true,
+            unique:true,
+        }
     }, {
         freezeTableName: true,
         timestamps: false

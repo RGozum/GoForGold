@@ -1,8 +1,7 @@
 const bcrypt = require('bcrypt');
 const express = require('express');
 const router = express.Router();
-const { Users } = require('../models');
-const {sign} = require('jsonwebtoken');
+const { Users, User_Role } = require('../models');
 
 router.get("/", async (req, res) => {
     const {user_role_id} = req.query;
@@ -10,8 +9,17 @@ router.get("/", async (req, res) => {
     const where = {};
     if (user_role_id) where.user_role_id=Number(user_role_id);
     
-    const listOfUsers = await Users.findAll({where});
-    res.json(listOfUsers);
+        try {
+        const listOfUsers = await Users.findAll({
+            where,
+            include: [User_Role], 
+            order: [['last_name', 'ASC'], ['first_name', 'ASC']]
+        });
+        res.json(listOfUsers);
+    } catch (error) {
+        console.error('Error fetching users:', error);
+        res.status(500).json({ error: 'Failed to fetch users' });
+    }
 });
 
 // router.post("/", async (req,res) => {
@@ -70,20 +78,18 @@ router.put("/:user_id/archive", async (req, res) => {
 
 });
 
-router.post("/login", async (req,res) => {
-  const {email_address, password } = req.body;
+// router.post("/login", async (req,res) => {
+//   const {email_address, password } = req.body;
 
-  const user = await Users.findOne({where: {email_address:email_address}});
+//   const user = await Users.findOne({where: {email_address:email_address}});
 
-  if (!user) return res.json({err: "No account associated with email"});
-  bcrypt.compare(password, user.password).then((match)  => {
-    if (!match) return res.json({error: "Incorrect password."});
+//   if (!user) return res.json({err: "No account associated with email"});
+//   bcrypt.compare(password, user.password).then((match)  => {
+//     if (!match) return res.json({error: "Incorrect password."});
     
-    const accessToken = sign({email_address: user.email_address, id:user.user_id}, 
-      process.env.JWT_KEY, {expiresIn:'3h'});
     
-    return res.json(accessToken);
-  });
-});
+//     return res.json(accessToken);
+//   });
+// });
 
 module.exports = router;

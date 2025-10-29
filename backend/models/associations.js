@@ -1,32 +1,14 @@
-const {Sequelize, DataTypes} = require("sequelize");
-const sequelize = new Sequelize(
-    'goforgolddb',
-    'root',
-    'root',
-    {
-        host: 'localhost',
-        dialect:'mysql'
-    }
-);
 
-const Users = require('./Users')(sequelize, DataTypes);
-const UserRoles = require('./User_Roles')(sequelize, DataTypes);
-const Activities = require('./Activities')(sequelize, DataTypes);
-const StudentEnrollment = require('./Student_Enrollment')(sequelize, DataTypes);
-const Categories = require('./Categories')(sequelize, DataTypes);
-const SchoolYears = require('./School_Years')(sequelize, DataTypes);
-const HonorRoll = require('./Honor_Roll')(sequelize, DataTypes);
-const HonorList = require('./Honor_List')(sequelize, DataTypes);
-const Attendance = require('./Attendance')(sequelize, DataTypes);
-const FacultyModerators = require('./Faculty_Moderators')(sequelize, DataTypes);
-
-
-
-const defineAssociations = () => {
+const defineAssociations = (db) => {
+    const { Users, User_Role, Activities, StudentEnrollment,
+         Categories, SchoolYears, HonorRoll, HonorList, Attendance,
+         FacultyModerators} =db;
 
     //User has one role, User roles belong to many user
-    UserRoles.hasMany(Users);
-    Users.belongsTo(UserRoles, {
+    User_Role.hasMany(Users, {
+        foreignKey:'user_role_id'
+    });
+    Users.belongsTo(User_Role, {
         foreignKey: 'user_role_id',
     });
 
@@ -56,7 +38,9 @@ const defineAssociations = () => {
 
     });
 
-    Categories.hasMany(Activities);
+    Categories.hasMany(Activities, {
+        foreignKey: 'category_id',
+    });
     Activities.belongsTo(Categories, {
         foreignKey: 'category_id',
     });

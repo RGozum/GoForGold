@@ -13,16 +13,37 @@ export default function LogIn() {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        const data = {email_address: email_address, password:password}
-        axios.post("http://localhost:3001/users/login",data).then((response) => {
+        const data = {email_address: email_address, password}
+
+        try {
+
+        axios.post("http://localhost:3001/auth/login",data).then((response) => {
           if (response.data.error) {
             alert(response.data.error);
           } else {
-          sessionStorage.setItem("accessToken", response.data);
+          sessionStorage.setItem("accessToken", response.data.message);
+          alert("Login Successful")
           }
         });
 
+    } catch(err) {
+        if (err.response) {
+            if (err.response.status===401) {
+                alert(err.response.data.error || "Invalid credentials");
+            } else {
+                alert (`Error ${err.response.status}: ${err.response.data.message || "Login failed"}`)
+            }
+        } else {
+            console.error("Login error:", err);
+            alert("Network or server error");
+        }
+    }
+
     };
+
+    const handleGoogleLogin = () => {
+        window.location.href = "http://localhost:3001/auth/google";
+    }
     return (
         <Container className="d-flex justify-content-center align-items-center"
         style={{minHeight:'100vh'}}>
@@ -57,6 +78,10 @@ export default function LogIn() {
                 </Form.Group>   
                 <Button type="submit">
                     Log In
+                </Button>
+                
+                <Button variant="danger" onClick={handleGoogleLogin}>
+                    Sign in with Google
                 </Button>
             </Form>
 
