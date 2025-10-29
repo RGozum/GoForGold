@@ -11,28 +11,18 @@ export default function LogIn() {
         setShowPassword(!showPassword);
     }
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         const data = {email_address: email_address, password}
 
         try {
-
-        axios.post("http://localhost:3001/auth/login",data).then((response) => {
-          if (response.data.error) {
-            alert(response.data.error);
-          } else {
-          sessionStorage.setItem("accessToken", response.data.message);
-          alert("Login Successful")
-          }
-        });
-
-    } catch(err) {
+        const response = await axios.post("http://localhost:3001/auth/login", 
+            { email_address, password });
+        sessionStorage.setItem("accessToken", response.data.message);
+        alert(response.data.message);
+        } catch(err) {
         if (err.response) {
-            if (err.response.status===401) {
-                alert(err.response.data.error || "Invalid credentials");
-            } else {
-                alert (`Error ${err.response.status}: ${err.response.data.message || "Login failed"}`)
-            }
+            alert(err.response.data.error)
         } else {
             console.error("Login error:", err);
             alert("Network or server error");

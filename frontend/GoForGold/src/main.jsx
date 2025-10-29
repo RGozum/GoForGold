@@ -1,6 +1,5 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import { createBrowserRouter, RouterProvider } from "react-router";
 import App from "./App.jsx";
 import AdminPanel from "./pages/Hello.jsx";
 import AccountCreation from "./pages/AccountCreation.jsx";
@@ -19,5 +18,7 @@ const router = createBrowserRouter([
 ]);
 
 ReactDOM.createRoot(document.getElementById("root")).render(
-  <RouterProvider router={router} />
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>
 );

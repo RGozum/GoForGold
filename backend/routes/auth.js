@@ -5,6 +5,7 @@ const {Users, User_Role}= require('../models');
 const bcrypt = require('bcrypt');
 
 router.post('/login', async (req,res,next) => {
+    console.log("Received login attempt:", req.body);
     const {email_address,password} = req.body;
     try {        
         const user = await Users.findOne({
@@ -21,18 +22,18 @@ router.post('/login', async (req,res,next) => {
 
         req.login(user, (err)=> {
             if (err) return next(err);
-            return res.json({
-                message: 'Login successful', user});
+            return res.status(200).json({
+                message: "Login successful!", user});
         });
     } catch (err) {
         console.error(err);
-        res.status(500).json({message: 'Server error during login'});
+        res.status(401).json({message: 'Server error during login'});
     }
 });
 
 router.post('/logout', (req,res) =>
     req.session.destroy(err => {
-        if (err) return res.status(500).json({error: "Failed to logout."});
+        if (err) return res.json({error: "Failed to logout."});
         res.clearCookie('connect.sid');
         res.json({message: "Logged out."})
     })
@@ -52,7 +53,7 @@ router.get('/google/callback',
         req.session.user_id=req.user.user_id;
 
         if (req.headers.accept && req.headers.accept.includes('text/html')) {
-            return res.redirect('/protected');
+            return res.redirect('http://localhost:5173/adminpanel');
         }
         return res.json({message: "Google login successful", user:req.user});
     }
