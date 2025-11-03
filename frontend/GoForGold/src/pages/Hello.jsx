@@ -14,11 +14,11 @@ const [categories, setCategories] = useState([]);
 const [activities, setActivities] = useState([])
 
 const fetchCategories = async() => {
-    const response = await axios.get("http://localhost:3001/categories");
+    const response = await axios.get("http://localhost:3001/categories", { withCredentials: true });
     setCategories(response.data);
 }
 const fetchActivities = async() => {
-  const response = await axios.get("http://localhost:3001/activities");
+  const response = await axios.get("http://localhost:3001/activities", {withCredentials:true});
   setActivities(response.data);
 }
 

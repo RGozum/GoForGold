@@ -60,13 +60,22 @@ export default function AddUsersComponent() {
 
         Papa.parse(file, {
             header: true,
+            skipEmptyLines: true,
             complete: (results) => {
-                const parsedUsers=results.data.map((row) => ({
-                    first_name:row.first_name || "",
+                const parsedUsers = results.data.map((row) => {
+                    const roleNameFromCSV = (row.user_role|| "").toString().trim().toLowerCase();
+                    const matchedRole = roles.find(
+                        (r) =>
+                            (r.user_role ||"").toString().trim().toLowerCase() === roleNameFromCSV
+                    );
+
+                return {
+                    first_name: row.first_name || "",
                     last_name: row.last_name || "",
                     email_address: row.email_address || "",
-                    user_role_id: row.user_role_id || "",
-                }));
+                    user_role_id: matchedRole ? Number(matchedRole.user_role_id) : "",
+                };
+                });
             setUserRows(parsedUsers);
             },
          });
@@ -117,7 +126,7 @@ export default function AddUsersComponent() {
                                     } />
                             </Col>
                             <Col md={3}>
-                                <Form.Select value={user.user_role_id} onChange={(e)=> handleChange(index,"user_role_id", Number(e.target.value))}>
+                                <Form.Select value={user.user_role_id || ""} onChange={(e)=> handleChange(index,"user_role_id", Number(e.target.value))}>
                                     <option value="">Select a role</option>
                                     {roles.map((rol) => (
                                         <option key={rol.user_role_id} value={rol.user_role_id}>

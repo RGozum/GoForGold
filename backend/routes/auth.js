@@ -5,7 +5,6 @@ const {Users, User_Role}= require('../models');
 const bcrypt = require('bcrypt');
 
 router.post('/login', async (req,res,next) => {
-    console.log("Received login attempt:", req.body);
     const {email_address,password} = req.body;
     try {        
         const user = await Users.findOne({
@@ -30,6 +29,18 @@ router.post('/login', async (req,res,next) => {
         res.status(401).json({message: 'Server error during login'});
     }
 });
+
+router.get('/check', (req,res)=> {
+    if (req.isAuthenticated()) {
+        return res.status(200).json({
+            authenticated: true,
+            user: {
+                user_id: req.user.user_id,
+                email_address: req.user.emai
+            }
+        })
+    }
+})
 
 router.post('/logout', (req,res) =>
     req.session.destroy(err => {

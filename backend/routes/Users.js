@@ -1,9 +1,14 @@
 const bcrypt = require('bcrypt');
 const express = require('express');
 const router = express.Router();
+const { isAuthenticated, hasRole } = require('../middleware/authMiddleware');
 const { Users, User_Role } = require('../models');
 
-router.get("/", async (req, res) => {
+router.get('/profile',isAuthenticated, (req,res)=> {
+  res.json({user:req.user});
+})
+
+router.get("/", isAuthenticated, has async (req, res) => {
     const {user_role_id} = req.query;
     
     const where = {};
