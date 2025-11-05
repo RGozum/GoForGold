@@ -3,15 +3,6 @@ const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const {Users, User_Role} = require('../models');
 
 module.exports = (passport) => {
-passport.serializeUser((user, done) => done(null, user.user_id));
-passport.deserializeUser(async (user_id, done) => {
-    try {
-        const user = await Users.findByPk(user_id, {include:User_Role});
-        done (null, user);
-    } catch (err) {
-        done(err)
-    }
-});
 
 passport.use(new GoogleStrategy({
     clientID: process.env.GOOGLE_CLIENT_ID,
@@ -24,8 +15,9 @@ passport.use(new GoogleStrategy({
         const google_id=profile.id;
 
         let user = await Users.findOne({
-            where: {google_id}});
-        console.log("Google ID from profile:", profile.id);
+            where: {google_id},
+            include: [{model: User_Role}]
+        });
 
         if (!user) {
             user = await Users.findOne({ where: { email_address: email } });

@@ -45,7 +45,7 @@ export default function AddUsersComponent() {
     const handleSubmit = async (e) => {
         try {
             e.preventDefault();
-            await axios.post("http://localhost:3001/users/bulk", {users: userRows});
+            await axios.post("http://localhost:3001/users/bulk", {users: userRows}, {withCredentials: true});
             alert("Users created successfully!");
             setUserRows([{first_name: "", last_name: "", email_address: "", user_role_id:""}])
         } catch (err) {

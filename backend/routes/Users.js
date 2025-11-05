@@ -1,6 +1,8 @@
 const bcrypt = require('bcrypt');
 const express = require('express');
 const router = express.Router();
+
+const {ADMIN} = require ('../config/roles');
 const { isAuthenticated, hasRole } = require('../middleware/authMiddleware');
 const { Users, User_Role } = require('../models');
 
@@ -8,7 +10,7 @@ router.get('/profile',isAuthenticated, (req,res)=> {
   res.json({user:req.user});
 })
 
-router.get("/", isAuthenticated, has async (req, res) => {
+router.get("/", isAuthenticated, hasRole(ADMIN), async (req, res) => {
     const {user_role_id} = req.query;
     
     const where = {};
@@ -27,17 +29,7 @@ router.get("/", isAuthenticated, has async (req, res) => {
     }
 });
 
-// router.post("/", async (req,res) => {
-//     const {first_name,last_name,email_address,user_role_id, defaultPassword} = req.body;
-//     if (!defaultPassword) defaultPassword = "Vianney!";
-//     password = await bcrypt.hash(defaultPassword, 10);
-
-//     const newUser = await Users.create({first_name,last_name,email_address,password, user_role_id});
-//     res.json(newUser);
-// });
-
-
-router.post("/bulk", async(req,res) => {
+router.post("/bulk",isAuthenticated, hasRole(ADMIN), async(req,res) => {
   try {
     const {users} = req.body;
 
@@ -73,7 +65,7 @@ router.post("/bulk", async(req,res) => {
 
 
 
-router.put("/:user_id/archive", async (req, res) => {
+router.put("/:user_id/archive", isAuthenticated, hasRole(ADMIN), async (req, res) => {
   const { user_id } = req.params;
   const user = await Users.findByPk(user_id);
   if (!user) return res.status(404).json({ message: "Not found" });
@@ -82,19 +74,5 @@ router.put("/:user_id/archive", async (req, res) => {
   res.json(user);
 
 });
-
-// router.post("/login", async (req,res) => {
-//   const {email_address, password } = req.body;
-
-//   const user = await Users.findOne({where: {email_address:email_address}});
-
-//   if (!user) return res.json({err: "No account associated with email"});
-//   bcrypt.compare(password, user.password).then((match)  => {
-//     if (!match) return res.json({error: "Incorrect password."});
-    
-    
-//     return res.json(accessToken);
-//   });
-// });
 
 module.exports = router;

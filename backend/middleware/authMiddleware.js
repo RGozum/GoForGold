@@ -1,19 +1,31 @@
+const {verifyToken} = require('../utils/jwt');
+
 function isAuthenticated(req,res,next)  {
-    if (req.isAuthenticated()) return next();
-    return res.status(401).json({error: "Unauthorized"});
+    const token = req.cookies.token;
+    if (!token) return res.status(401).json({error: "Unauthorized"});
+
+    const decoded = verifyToken(token);
+    if (!decoded) return res.status(403).json({error: "Invalid token"});
+
+    console.log(decoded);
+    req.user=decoded;
+    next();
+
 }
 
-function hasRole(role) {
+function hasRole(...allowedRoles) {
     return (req,res,next) => {
-        if (!req.isAuthenticated()) {
-            return res.staus(401).json({error: "Please log in."})
-        }
+        if (!req.user) return res.status(401).json({error: "Unauthorized"});
+
+        const userRole = req.user.user_role;
+
+        if (!allowedRoles.includes(userRole)) {
+            return res.status(403).json({
+                message: `Forbidden: Requires one of [${allowedRoles.join(", ")}]`
+        });
+    }
         
-        const userRole = req.user?.User_Role?.user_role;
-        if (userRole === role) {
-            return next();
-        }
-        res.status(403).json({message: "Forbidden: Incorrect role."})
+        next()
     };
 }
 

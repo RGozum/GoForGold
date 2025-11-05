@@ -1,15 +1,17 @@
 const express = require('express');
-const passport = require('passport');
 const router = express.Router();
 const {Users, User_Role}= require('../models');
 const bcrypt = require('bcrypt');
+
+const {createToken, verifyToken} = require('../utils/jwt');
+const passport = require('passport');
 
 router.post('/login', async (req,res,next) => {
     const {email_address,password} = req.body;
     try {        
         const user = await Users.findOne({
             where: {email_address},
-            include: User_Role,
+            include: [{model:User_Role}],
         });
 
         if (!user) {
@@ -18,37 +20,49 @@ router.post('/login', async (req,res,next) => {
 
         const match = await bcrypt.compare(password, user.password);
         if (!match) return res.status(401).json({error:"Invalid email or password."});
-
-        req.login(user, (err)=> {
-            if (err) return next(err);
-            return res.status(200).json({
-                message: "Login successful!", user});
+        
+        const token = createToken(user);
+        res.cookie("token", token, {
+            httpOnly: true,
+            secure: false,
+            sameSite: "lax",
+            maxAge: 24*60*60*1000
         });
+
+        return res.json({message: "Login successful!", user:{
+            user_id: user.user_id,
+            email_address: user.email_address,
+            user_role: user.User_Role?.user_role,
+            
+        },
+    });
     } catch (err) {
         console.error(err);
-        res.status(401).json({message: 'Server error during login'});
+        res.status(500).json({message: 'Server error during login'});
     }
 });
 
 router.get('/check', (req,res)=> {
-    if (req.isAuthenticated()) {
-        return res.status(200).json({
-            authenticated: true,
-            user: {
-                user_id: req.user.user_id,
-                email_address: req.user.emai
-            }
-        })
-    }
-})
+    const token = req.cookies.token;
+    if (!token) {
+        return res.status(401).json({authenticated: false});
+    };
 
-router.post('/logout', (req,res) =>
-    req.session.destroy(err => {
-        if (err) return res.json({error: "Failed to logout."});
-        res.clearCookie('connect.sid');
-        res.json({message: "Logged out."})
-    })
-)
+    const decoded = verifyToken(token);
+    if (!decoded) {
+        return res.status(403).json({authenticated: false});
+    };
+
+    res.json({
+        authenticated: true,
+        user: decoded
+    });
+});
+
+router.post('/logout', (req,res) => {
+    res.clearCookie('token');
+    res.json({message: "Logged out."});
+})
 
 router.get('/google',
     passport.authenticate('google', {
@@ -58,15 +72,28 @@ router.get('/google',
 
 router.get('/google/callback', 
     passport.authenticate('google', {
-        failureRedirect: '/auth/login/failed'
-    }),
-    (req, res) => {
-        req.session.user_id=req.user.user_id;
+        failureRedirect: '/auth/login/failed',
+        session: false
+    }), (req,res) => {
+        try {
+            const token = createToken(req.user);
+            res.cookie("token", token, {
+                httpOnly: true,
+                secure: false,
+                sameSite: "lax",
+                maxAge: 24*60*60*1000
+            });
 
-        if (req.headers.accept && req.headers.accept.includes('text/html')) {
-            return res.redirect('http://localhost:5173/adminpanel');
+            const role = req.user.User_Role?.user_role;
+            console.log(role);
+            if (role === "Administrator") return res.redirect('http://localhost:5173/adminpanel');
+            if (role === "Faculty") return res.redirect("http://localhost:5173/facultypanel");
+            return res.redirect("http://localhost:5173/studentdashboard");
+    
+        } catch (err) {
+            console.error(err);
+            res.redirect("http://localhost:5173/login");
         }
-        return res.json({message: "Google login successful", user:req.user});
     }
 );
 

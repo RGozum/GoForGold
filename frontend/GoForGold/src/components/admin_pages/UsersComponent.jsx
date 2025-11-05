@@ -12,7 +12,8 @@ const [selectedRole, setSelectedRole] = useState("");
 
 const fetchUsers = async(role_id) => {
     if (!role_id) return;
-    const response = await axios.get("http://localhost:3001/users", {
+    const response = await axios.get("http://localhost:3001/users", 
+        {withCredentials: true,
         params: {user_role_id: role_id},
     });
     setUsers(response.data);

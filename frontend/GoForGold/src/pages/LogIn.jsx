@@ -1,11 +1,16 @@
-import React, {useState,useEffect} from 'react';
+import React, {useState, useContext} from 'react';
+import {useNavigate} from "react-router-dom";
 import {Container, Form, InputGroup, Button} from 'react-bootstrap';
 import axios from "axios";
+import { AuthContext } from '../AuthContext';
 
 export default function LogIn() {
     const [email_address, setEmailAddress] = useState("")
     const [password, setPassword] = useState("");
     const [showPassword, setShowPassword]=useState(false);
+
+    const {setUser} = useContext(AuthContext);
+    const navigate = useNavigate();
 
     const togglePasswordVisibility = () => {
         setShowPassword(!showPassword);
@@ -16,11 +21,19 @@ export default function LogIn() {
         const data = {email_address: email_address, password}
 
         try {
-        const response = await axios.post("http://localhost:3001/auth/login", 
-            { email_address, password });
-        sessionStorage.setItem("accessToken", response.data.message);
-        alert(response.data.message);
-        } catch(err) {
+            const response = await axios.post("http://localhost:3001/auth/login",
+                 data, {withCredentials:true});
+            const user = response.data.user;
+            console.log("Response:", user);
+            setUser(user);
+        
+            const role = response.data.user.user_role;
+            console.log("Role:", role);
+
+            if (role === "Administrator") navigate("/adminpanel");
+            else if (role === "Faculty") navigate("/facultypanel");
+            else navigate("/studentdashboard");
+        } catch (err) {
         if (err.response) {
             alert(err.response.data.error)
         } else {
