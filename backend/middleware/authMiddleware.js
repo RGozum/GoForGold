@@ -23,8 +23,7 @@ function hasRole(...allowedRoles) {
             return res.status(403).json({
                 message: `Forbidden: Requires one of [${allowedRoles.join(", ")}]`
         });
-    }
-        
+    }  
         next()
     };
 }

@@ -25,7 +25,8 @@ const fetchRoles = async() => {
 };
 
 const archiveUser = async(user_id) => {
-    const response = await axios.put(`http://localhost:3001/users/${user_id}/archive`);
+    const response = await axios.put(`http://localhost:3001/users/${user_id}/archive`, {},
+      {withCredentials: true});
     const updatedUser = response.data;
 
     setUsers((prevUsers) =>

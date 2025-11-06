@@ -7,7 +7,7 @@ import AddActivityPop from './AddActivityPop';
 
 import './ScrollablePanel.css';
 
-export default function ActivityPanel({categories, onAddActivity, globalActivities, refreshActivities}) {
+export default function ActivityPanel({categories, onAddActivity, globalActivities}) {
 const [activities, setActivities] = useState([]);
 const [selectedCategory, setSelectedCategory] = useState("")
 
@@ -39,7 +39,9 @@ useEffect(() => {
 
 
 const archiveActivity = async (activity_id) => {
-  const response = await axios.put(`http://localhost:3001/activities/${activity_id}/archive`);
+  const response = await axios.put(`http://localhost:3001/activities/${activity_id}/archive`,{}, {
+    withCredentials: true,
+  });
   const updatedActivity = response.data;
 
   setActivities((prevActivities) =>

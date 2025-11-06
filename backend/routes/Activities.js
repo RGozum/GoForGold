@@ -1,6 +1,10 @@
 const express = require('express');
 const router = express.Router();
-const { Activities, Categories } = require('../models');
+const { Activities} = require('../models');
+
+
+const {ADMIN} = require ('../config/roles');
+const { isAuthenticated, hasRole } = require('../middleware/authMiddleware');
 
 router.get("/", async(req, res) => {
     const {category_id} = req.query;
@@ -12,7 +16,7 @@ router.get("/", async(req, res) => {
     res.json(listOfActivities);
 });
 
-router.post("/", async (req,res) => {
+router.post("/",  isAuthenticated, hasRole(ADMIN), async (req,res) => {
     const {activity_name,category_id} = req.body;
     const newActivity = await Activities.create({
       activity_name,
@@ -21,7 +25,7 @@ router.post("/", async (req,res) => {
     res.json(newActivity);
 });
 
-router.put("/:activity_id/archive", async (req, res) => {
+router.put("/:activity_id/archive", isAuthenticated, hasRole(ADMIN), async (req, res) => {
   const { activity_id } = req.params;
   const activity = await Activities.findByPk(activity_id);
   if (!activity) return res.status(404).json({ message: "Not found" });

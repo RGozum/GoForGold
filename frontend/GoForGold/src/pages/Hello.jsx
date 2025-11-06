@@ -14,11 +14,11 @@ const [categories, setCategories] = useState([]);
 const [activities, setActivities] = useState([])
 
 const fetchCategories = async() => {
-    const response = await axios.get("http://localhost:3001/categories", { withCredentials: true });
+    const response = await axios.get("http://localhost:3001/categories");
     setCategories(response.data);
 }
 const fetchActivities = async() => {
-  const response = await axios.get("http://localhost:3001/activities", {withCredentials:true});
+  const response = await axios.get("http://localhost:3001/activities");
   setActivities(response.data);
 }
 
@@ -31,13 +31,14 @@ const addActivity = async(activityName, cat_id) => {
     const response=await axios.post("http://localhost:3001/activities", {
         activity_name: activityName,
         category_id: cat_id,
-    });
+    }, {withCredentials: true});
     fetchActivities(cat_id);
 }
 
 
 const archiveCategory = async(category_id) => {
-    const response = await axios.put(`http://localhost:3001/categories/${category_id}/archive`);
+    const response = await axios.put(`http://localhost:3001/categories/${category_id}/archive`, {},
+      {withCredentials: true});
     const updatedCategory = response.data;
 
 setCategories((prevCategories) =>
@@ -50,7 +51,7 @@ const addCategory = async (name) => {
     const response = await axios.post("http://localhost:3001/categories", {
       category_name: name,
       active: true,
-    });
+    }, {withCredentials: true});
     setCategories((prev) => [...prev, response.data]);
   };
 
@@ -69,7 +70,6 @@ const addCategory = async (name) => {
               categories={categories}
               onAddActivity={addActivity}
               globalActivities={activities}
-              refreshActivities={fetchActivities}
             />
           </Col>
         </Row>
