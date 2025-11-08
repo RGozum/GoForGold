@@ -1,6 +1,5 @@
 import React, {useContext} from 'react';
 import {Navbar, Nav, Container, NavDropdown, Button, Image} from 'react-bootstrap';
-import SearchIcon from '../../assets/searchicon.svg';
 import ProfilePictureIcon from '../../assets/profilepictureicon.svg';
 import LogOutIcon from '../../assets/logoutpic.svg';
 import { AuthContext } from '../../AuthContext';
@@ -11,7 +10,7 @@ import './AdminHeader.css'
 
 
 export default function AdminHeader () {
-    const {logout} = useContext(AuthContext);
+    const {user, logout} = useContext(AuthContext);
     const navigate = useNavigate();
 
     const onLogout = async (e) => {
@@ -27,17 +26,12 @@ export default function AdminHeader () {
                 <Navbar.Toggle aria-controls="navbarScroll" />
                 <Navbar.Collapse id="navbarScroll">
                     <Nav className="ms-auto d-flex align-items-center " navbarScroll>
-                        <Nav.Link href="/adminpanel">Admin Panel</Nav.Link>
                         <Nav.Link href="/facultydashboard">Faculty Dashboard</Nav.Link>
-                        <Nav.Link href="/honorroll">Honor Roll</Nav.Link>
-                        <Nav.Link href="/accountcreation">Account Creation</Nav.Link>
+                        <Nav.Link href="/attendance">Attendance Panel</Nav.Link>
+                        {user.user_role === "Administrator" ? <Nav.Link href="/adminpanel">Admin Panel</Nav.Link> : <div></div>}
                     </Nav>
 
                     <Nav className="d-flex align-items-center gap-3">
-                        <Nav.Link href="search" className="nav-link">
-                            <img src={SearchIcon} className="search-icon" />
-                        </Nav.Link>
-
                         <NavDropdown title={
                             <img src={ProfilePictureIcon} className="pfp"/>
                         } id="profile-dropdown" align="end">

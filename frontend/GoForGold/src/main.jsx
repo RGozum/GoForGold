@@ -6,6 +6,7 @@ import AdminPanel from "./pages/Hello.jsx";
 import AccountCreation from "./pages/AccountCreation.jsx";
 import LogIn from "./pages/LogIn.jsx";
 import StudentDash from "./pages/StudentDash.jsx";
+import FacultyDash from "./pages/FacultyDash.jsx";
 
 import ProtectedRoute from "./components/ProtectedRoute";
 
@@ -36,6 +37,14 @@ const router = createBrowserRouter([
         element: (
           <ProtectedRoute allowedRoles={["Student"]}>
             <StudentDash />
+          </ProtectedRoute>
+        )
+      },
+      {
+        path: "facultydashboard",
+        element: (
+          <ProtectedRoute allowedRoles={["Administrator", "Faculty"]}>
+            <FacultyDash />
           </ProtectedRoute>
         )
       }

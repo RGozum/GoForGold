@@ -28,10 +28,9 @@ export default function LogIn() {
             setUser(user);
         
             const role = response.data.user.user_role;
-            console.log("Role:", role);
 
             if (role === "Administrator") navigate("/adminpanel");
-            else if (role === "Faculty") navigate("/facultypanel");
+            else if (role === "Faculty") navigate("/facultydashboard");
             else navigate("/studentdashboard");
         } catch (err) {
         if (err.response) {

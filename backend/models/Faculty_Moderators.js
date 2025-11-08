@@ -1,5 +1,5 @@
 module.exports = (sequelize, DataTypes) => {
-    const FacultyModerators = sequelize.define("FacultyModerators", {
+    const Faculty_Moderators = sequelize.define("Faculty_Moderators", {
         faculty_id: {
             type: DataTypes.INTEGER,
             allowNull: false,
@@ -12,6 +12,6 @@ module.exports = (sequelize, DataTypes) => {
         freezeTableName: true,
         timestamps: false
     });
-    return FacultyModerators;
+    return Faculty_Moderators;
 
 };

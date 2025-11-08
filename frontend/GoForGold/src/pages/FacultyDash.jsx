@@ -1,5 +1,5 @@
 import {Container, Row, Col} from 'react-bootstrap';
-import StudentHeader from "../components/student_dash_pages/StudentHeader.jsx";
+import FacultyHeader from "../components/faculty_dash_pages/FacultyHeader.jsx";
 import ActivitiesDash from "../components/student_dash_pages/ActivitiesDash.jsx";
 
 
@@ -8,7 +8,7 @@ export default function AccountCreationPage() {
     return (
         <div>
             <Row className="mb-4">
-                <StudentHeader />
+                <FacultyHeader />
             </Row>
             <Row className="mb-4">
                 <ActivitiesDash />

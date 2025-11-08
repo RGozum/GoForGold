@@ -2,7 +2,7 @@
 const defineAssociations = (db) => {
     const { Users, User_Role, Activities, Student_Enrollment,
          Categories, SchoolYears, HonorRoll, HonorList, Attendance,
-         FacultyModerators} =db;
+         Faculty_Moderators} =db;
 
     //User has one role, User roles belong to many user
     User_Role.hasMany(Users, {
@@ -34,12 +34,12 @@ const defineAssociations = (db) => {
     });
 
     Users.belongsToMany(Activities, {
-        through: FacultyModerators,
+        through: Faculty_Moderators,
         foreignKey: 'faculty_id',
         otherKey: 'activity_moderating_id'
     });
     Activities.belongsToMany(Users, 
-        {through: FacultyModerators,
+        {through: Faculty_Moderators,
         foreignKey: 'activity_moderating_id',
         otherKey: 'faculty_id'
 
