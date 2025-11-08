@@ -1,4 +1,4 @@
-import React, {useState, useContext} from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 import {useNavigate} from "react-router-dom";
 import {Container, Form, InputGroup, Button} from 'react-bootstrap';
 import axios from "axios";
@@ -9,8 +9,17 @@ export default function LogIn() {
     const [password, setPassword] = useState("");
     const [showPassword, setShowPassword]=useState(false);
 
-    const {setUser} = useContext(AuthContext);
+    const {user, setUser} = useContext(AuthContext);
     const navigate = useNavigate();
+
+    useEffect(( ) => {
+        if (user) {
+            const role = user.user_role
+            if (role === "Administrator") navigate("/adminpanel");
+            else if (role === "Faculty") navigate("/facultydashboard");
+            else navigate("/studentdashboard");
+        }
+    }, [user,navigate]);
 
     const togglePasswordVisibility = () => {
         setShowPassword(!showPassword);
