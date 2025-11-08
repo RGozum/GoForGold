@@ -6,7 +6,7 @@ const { isAuthenticated } = require('../middleware/authMiddleware');
 router.post("/enroll", isAuthenticated, async(req,res) => {
     const student_id = req.user.user_id;
     const {activities_id} = req.body;
-    const points = null;
+    const points = 0;
 
     const newEnrollment = await Student_Enrollment.create({
         student_id,
@@ -54,5 +54,21 @@ router.get("/enrolledactivities", isAuthenticated, async(req,res)=> {
     res.status(500).json({err: "Failed to retrieve activities"});
 }
 });
+
+router.get("/points", isAuthenticated, async(req,res)=> {
+    try {
+        const student_id = req.user.user_id;
+        const totalPoints = await Student_Enrollment.sum("points", {
+            where: {
+                approved: true,
+                student_id
+            },
+        })
+        res.json({points: totalPoints || 0});
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({err: "Failed to get points"});
+    }
+})
 
 module.exports = router;

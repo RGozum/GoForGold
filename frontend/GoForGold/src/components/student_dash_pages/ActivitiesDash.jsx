@@ -25,6 +25,7 @@ export default function ActivitiesDash() {
             activities_id,
         }, {withCredentials: true});
         fetchActivities();
+        fetchPoints();
     }
 
     const onDelete = async (activities_id) => {
@@ -36,20 +37,33 @@ export default function ActivitiesDash() {
             const updatedActivities = prev.filter((act)=>
             Number(act.activities_id) !== Number(activities_id)
         );
-            console.log(updatedActivities);
             return updatedActivities
-
         });
+        fetchPoints();
     }
+
+    const [points, setPoints] = useState("");
+
+    const fetchPoints = async() => {
+        const response = await axios.get("http://localhost:3001/studentenrollment/points", {
+            withCredentials: true,
+        });
+        console.log(response.data.points);
+        setPoints(response.data.points || 0);
+    }
+
+    useEffect(()=> {
+        fetchPoints();
+    }, []);
+
     
-    // const points = 40;
-    // const now = (points/40)*100;
+    const now = (points/40)*100;
 
     return (
         <div>
             <Row className="mb-3">
             <Col xs="7" lg="7">
-                {/* <ProgressBar now={now} label={`${now}%`} striped animated variant="success" style={{height: "35px"}} /> */}
+                <ProgressBar now={now} label={`${now}%`} striped animated variant="success" style={{height: "35px"}} />
             </Col>
             <Col xs="3" lg="3"></Col>
             <Col>
