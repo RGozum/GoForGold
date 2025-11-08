@@ -1,17 +1,28 @@
 module.exports = (sequelize, DataTypes) => {
-    const StudentEnrollment = sequelize.define("StudentEnrollment", {
+    const Student_Enrollment = sequelize.define("Student_Enrollment", {
         student_id: {
             type: DataTypes.INTEGER,
             allowNull: false,
         },
-        activities_Id: {
+        activities_id: {
             type: DataTypes.INTEGER,
             allowNull: false,
         }, 
+
+        approved: {
+            type: DataTypes.BOOLEAN,
+            allowNull: true,
+            defaultValue: null,
+        },
+        points: {
+            type: DataTypes.INTEGER,
+            allowNull: true,
+            defaultValue: true,
+        }
     }, {
         freezeTableName: true,
         timestamps: false
     });
-    return StudentEnrollment;
+    return Student_Enrollment;
 
 };

@@ -1,0 +1,98 @@
+import {Button, Modal, Form} from "react-bootstrap";
+import React, {useState, useEffect} from 'react';
+import axios from 'axios';
+
+export default function EnrollActivityPop({enrollActivity}) {
+    const [show, setShow] = useState(false);
+    const [selectedCategory, setSelectedCategory] = useState("");
+    const [selectedActivity, setSelectedActivity] = useState("");
+
+    const [categories, setCategories] = useState([]);
+    const fetchCategories = async () => {
+        const response = await axios.get("http://localhost:3001/categories/active");
+        setCategories(response.data);
+    }
+
+    const [activities, setActivities] = useState([]);
+    const fetchActivities = async(cat_id) => {
+        if (!cat_id) return;
+        const response = await axios.get(`http://localhost:3001/activities/${cat_id}/active`);
+        setActivities(response.data);
+    }
+
+    useEffect(() => {
+        fetchCategories();
+    }, [])
+
+    useEffect(() => {
+        if (categories.length >0 && selectedCategory==="") {
+            setSelectedCategory(categories[0].category_id);
+        }
+    }, [categories])
+
+    useEffect(()=> {
+        if (!selectedCategory) return;
+        fetchActivities(selectedCategory);
+    }, [selectedCategory]);
+
+    const handleClose = () => setShow(false);
+    const handleShow = () => {
+        setShow(true);
+    }
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        if (!selectedActivity || !selectedCategory) return;
+        console.log('enrollActivity =', enrollActivity);
+        await enrollActivity(selectedActivity);
+        handleClose();
+        setSelectedActivity("");
+        setSelectedCategory(categories[0].category_id)
+    }
+
+    return (
+        <>
+            <Button onClick={handleShow}>Add Activity</Button>
+
+            <Modal
+                show={show}
+                onHide={handleClose}
+                backdrop="static">
+                <Modal.Header closeButton>
+                    <Modal.Title>Add Activity</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <Form onSubmit={handleSubmit} className="form-inline">
+                        <Form.Group className="mb-3">
+                            <Form.Label>Category</Form.Label>
+                            <Form.Select value={selectedCategory} onChange={(e)=> setSelectedCategory(Number(e.target.value))}>
+                                {categories.map((cat)=> (
+                                    <option key={cat.category_id} value={cat.category_id}>
+                                        {cat.category_name}
+                                    </option>
+                                ))}                            
+                            </Form.Select>
+                        </Form.Group>
+
+                        <Form.Group>
+                            <Form.Label>Activities in Category</Form.Label>
+                            <Form.Select value={selectedActivity} onChange={(e)=>setSelectedActivity(Number(e.target.value))}>
+                                {activities.map((act)=> (
+                                    <option key={act.activity_id} value={act.activity_id}>
+                                        {act.activity_name}
+                                    </option>
+                                ))}
+                            </Form.Select>
+                        </Form.Group>
+
+                        <Button variant="success" type="submit" className="mt-3 w-100">
+                            Add
+                        </Button>
+                    </Form>
+                </Modal.Body>
+            </Modal>
+        
+        </>
+    )
+    
+}

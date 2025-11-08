@@ -1,6 +1,6 @@
 
 const defineAssociations = (db) => {
-    const { Users, User_Role, Activities, StudentEnrollment,
+    const { Users, User_Role, Activities, Student_Enrollment,
          Categories, SchoolYears, HonorRoll, HonorList, Attendance,
          FacultyModerators} =db;
 
@@ -13,14 +13,21 @@ const defineAssociations = (db) => {
     });
 
 
-    //User has many activities,  activities have many users
+    //User has many activities, activities have many users
+    Student_Enrollment.belongsTo(Activities, {
+        foreignKey: 'activities_id'
+    });
+    Student_Enrollment.belongsTo(Users, {
+        foreignKey: 'student_id'
+    });
+
     Users.belongsToMany(Activities, {
-        through: StudentEnrollment,
+        through: Student_Enrollment,
         foreignKey: 'student_id',
         otherKey: 'activities_id'
     });
     Activities.belongsToMany(Users, 
-        {through: StudentEnrollment,
+        {through: Student_Enrollment,
         foreignKey: 'activities_id',
         otherKey: 'student_id'
 
@@ -63,10 +70,10 @@ const defineAssociations = (db) => {
         otherKey: 'student_id'
     });
 
-    Attendance.belongsTo(StudentEnrollment, 
+    Attendance.belongsTo(Student_Enrollment, 
         { foreignKey: 'student_id', 
             as: 'student' });
-    Attendance.belongsTo(StudentEnrollment, 
+    Attendance.belongsTo(Student_Enrollment, 
         { foreignKey: 'activity_id', 
             as: 'activity' });
 

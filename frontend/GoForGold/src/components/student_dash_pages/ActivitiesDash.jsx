@@ -1,48 +1,79 @@
-import { Container, Col, Row, ProgressBar, Form } from "react-bootstrap";
+import { Container, Col, Row, ProgressBar, Button} from "react-bootstrap";
 import React, {useEffect, useState} from 'react';
 import axios from 'axios';
 import './ActivitiesDash.css';
 
+import RemoveActivityPop from "./RemoveActivityPopUp";
+import EnrollActivityPop from "./EnrollActivityPop";
+
 export default function ActivitiesDash() {
 
-    const [categories, setCategories] = useState([]);
     const [activities, setActivities] = useState([]);
 
-    const [selectedCategory, setSelectedCategory] = useState("");
-    
-    const fetchCategories = async() => {
-        const response = await axios.get("http://localhost:3001/categories", { withCredentials: true });
-        setCategories(response.data);
-    };
+    const fetchActivities = async() => {
+        const response = await axios.get("http://localhost:3001/studentenrollment/enrolledactivities", 
+        {withCredentials: true});
+        setActivities(response.data);
+    }
+
     useEffect(() => {
-        fetchCategories();
+        fetchActivities();
     }, []);
+
+    const onEnroll = async(activities_id) => {
+        const response = await axios.post("http://localhost:3001/studentenrollment/enroll", {
+            activities_id,
+        }, {withCredentials: true});
+        fetchActivities();
+    }
+
+    const onDelete = async (activities_id) => {
+        await axios.delete(`http://localhost:3001/studentenrollment/${activities_id}/delete`,{
+            withCredentials: true,
+        });
+
+        setActivities((prev)=> {
+            const updatedActivities = prev.filter((act)=>
+            Number(act.activities_id) !== Number(activities_id)
+        );
+            console.log(updatedActivities);
+            return updatedActivities
+
+        });
+    }
     
-    const points = 40;
-    const now = (points/40)*100;
+    // const points = 40;
+    // const now = (points/40)*100;
 
     return (
         <div>
-        <Container fluid>
-        <Col className="mb-3">
-            <ProgressBar now={now} label={`${now}%`} striped animated variant="success"/>
-        </Col>
-            <Col className="d-flex align-items-center panel">
-            <h3>Your Activities</h3>
-            <Form.Select value={selectedCategory} onChange={(e) => setSelectedCategory(Number(e.target.value))} className="mb-2 w-25 ms-auto">
-                <option value="">Select a category</option>
-                {categories.map((cat)=> (
-                    <option key = {cat.category_id} value={cat.category_id}>
-                        {cat.category_name}
-                    </option>
-                ))}
-            </Form.Select>
+            <Row className="mb-3">
+            <Col xs="7" lg="7">
+                {/* <ProgressBar now={now} label={`${now}%`} striped animated variant="success" style={{height: "35px"}} /> */}
             </Col>
-
-            
-        </Container>
+            <Col xs="3" lg="3"></Col>
+            <Col>
+                <EnrollActivityPop enrollActivity={onEnroll}/>
+            </Col>
+            </Row>
+            <div className="panel">
+                <h3>Your Activities</h3>
+                <ul className="ul-style">
+                      {activities.map((act) => (
+                        <li key={act.activities_id}>
+                            <Row className="act-cat">
+                                <Col xs={2} md={2} className="category-item">{act.Activity.Category.category_name}</Col>
+                                <Col xs={2} md={2} className="activity-item">{act.Activity.activity_name}</Col>
+                                <Col xs={2} md={2}  className="points-item">{act.approved===null ? (<p>Not approved.</p>) : (act.points + " points")}</Col>
+                                <Col xs={2} md={4}><RemoveActivityPop 
+                                   activities_id={act.activities_id} handleDelete={onDelete} /> </Col>
+                            </Row>
+                        </li>  
+                        ))}
+                </ul>
+            </div>
 
         </div>
         
-    )
+    );
 }

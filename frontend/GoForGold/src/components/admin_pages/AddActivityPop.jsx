@@ -1,8 +1,6 @@
 import {Button, Modal, Form} from "react-bootstrap";
 import React, {useState, useEffect} from 'react';
-
 import './AddCategoryPop.css';
-
 
 export default function AddActivityPop({categories, onAdd}) {
     const [show, setShow] = useState(false);

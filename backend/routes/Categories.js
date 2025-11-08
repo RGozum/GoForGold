@@ -10,10 +10,29 @@ router.get("/", async (req, res) => {
     res.json(listOfCategories);
 });
 
+router.get("/active", async(req,res) => {
+  try {
+    const where = {active: true}
+    const activeCategories = await Categories.findAll({where});
+
+    res.json(activeCategories)
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({err: "Failed to retrieve active categories"});
+  }
+
+})
+
 router.post("/", isAuthenticated, hasRole(ADMIN), async (req,res) => {
+  try {
     const {category_name} = req.body;
     const newCategory = await Categories.create({category_name});
     res.json(newCategory);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({err: "Failed to create category"});
+  } 
+
 });
 
 router.put("/:category_id/archive", isAuthenticated, hasRole(ADMIN), async (req, res) => {
@@ -23,7 +42,6 @@ router.put("/:category_id/archive", isAuthenticated, hasRole(ADMIN), async (req,
   category.active = !category.active; 
   await category.save();
   res.json(category);
-
 });
 
 

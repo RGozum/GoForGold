@@ -7,10 +7,8 @@ function isAuthenticated(req,res,next)  {
     const decoded = verifyToken(token);
     if (!decoded) return res.status(403).json({error: "Invalid token"});
 
-    console.log(decoded);
     req.user=decoded;
     next();
-
 }
 
 function hasRole(...allowedRoles) {

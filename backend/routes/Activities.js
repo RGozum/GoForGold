@@ -16,6 +16,20 @@ router.get("/", async(req, res) => {
     res.json(listOfActivities);
 });
 
+router.get("/:category_id/active", async(req,res) => {
+  const {category_id}=req.params;
+  try {
+    const activeActivities = await Activities.findAll({
+      where: {category_id, active: true}
+    });
+    res.json(activeActivities);
+  }catch (err){ 
+    console.error(err);
+    res.status(500).json({err: "Failed to retreieve active activities."});
+  }
+  
+})
+
 router.post("/",  isAuthenticated, hasRole(ADMIN), async (req,res) => {
     const {activity_name,category_id} = req.body;
     const newActivity = await Activities.create({
