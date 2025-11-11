@@ -6,7 +6,6 @@ import { AuthContext } from '../../AuthContext';
 import { useNavigate } from 'react-router';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
-import './AdminHeader.css'
 
 
 export default function AdminHeader () {

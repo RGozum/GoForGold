@@ -41,7 +41,9 @@ export default function ModActivitiesDash() {
                         enrolledStudents.map((enroll)=> (
                             <li key={enroll.student_id}>
                                 <Row>
-                                    <Col xs={2} md={2}>{enroll.User.first_name}{enroll.User.last_name}</Col>
+                                    <Col xs={2} md={2}>{enroll.User.first_name} {enroll.User.last_name}</Col>
+                                    <Col xs={2} md={2}>{enroll.approved===null ? (<Button>Test</Button>) : (enroll.approved)}</Col>
+                                    <Col xs={2} md={2}>{enroll.points===null ? (<p className="margin-0">No points.</p>) : (enroll.points)}</Col>
                                 </Row>
                             </li>
                         ))
