@@ -41,6 +41,9 @@ app.use('/auth', authRoutes);
 const studentEnrollmentRoutes = require('./routes/Student_Enrollment');
 app.use('/studentenrollment', studentEnrollmentRoutes);
 
+const facultyModeratorsRoutes = require('./routes/Faculty_Moderators');
+app.use('/facultymoderators',facultyModeratorsRoutes);
+
 sequelize.authenticate().then(() => {
    console.log('Connection has been established successfully.');
 }).catch((error) => {

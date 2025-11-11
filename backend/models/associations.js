@@ -14,8 +14,14 @@ const defineAssociations = (db) => {
 
 
     //User has many activities, activities have many users
+    Activities.hasMany(Student_Enrollment, {
+        foreignKey: 'activities_id',
+        sourceKey: 'activity_id',
+    });
+
     Student_Enrollment.belongsTo(Activities, {
-        foreignKey: 'activities_id'
+        foreignKey: 'activities_id',
+        targetKey: 'activity_id',
     });
     Student_Enrollment.belongsTo(Users, {
         foreignKey: 'student_id'
@@ -44,6 +50,11 @@ const defineAssociations = (db) => {
         otherKey: 'faculty_id'
 
     });
+
+    Faculty_Moderators.belongsTo(Activities, {
+        foreignKey: 'activity_moderating_id',
+        targetKey: 'activity_id',
+    })
 
     Categories.hasMany(Activities, {
         foreignKey: 'category_id',
