@@ -1,6 +1,8 @@
-import {Container, Col, Row, Form, Button} from "react-bootstrap"
+import {Container, Col, Row, Form, Button, ButtonGroup} from "react-bootstrap"
 import React, {useEffect, useState} from 'react';
 import axios from 'axios';
+import ApprovalPop from './ApprovalPop';
+import './FacultyDash.css';
 
 export default function ModActivitiesDash() {
     const [selectedActivity, setSelectedActivity]=useState("");
@@ -18,12 +20,15 @@ export default function ModActivitiesDash() {
         fetchActivities();
     }, [])
     
-    const enrolledStudents = activities.filter((act)=> act.activity_moderating_id === selectedActivity)
-                    .flatMap((act)=> act.Activity.Student_Enrollments);
+    const enrolledStudents = activities.filter((act)=> act.activity_moderating_id === selectedActivity).flatMap((act)=> act.Activity.Student_Enrollments);
+    
+    
     return (
         <div>
-            <Form className="form-inline">
-                <Form.Group className="mb-3">
+            <Row>
+                <Col xs={3}>
+                    <Form className="form-inline">
+                    <Form.Group className="mb-3">
                     <Form.Select value={selectedActivity} onChange={(e)=> setSelectedActivity(Number(e.target.value))}>
                         <option value="">Select an Activity</option>
                         {activities.map((act)=> (
@@ -34,16 +39,30 @@ export default function ModActivitiesDash() {
                     </Form.Select>
                     </Form.Group>
             </Form>
+                </Col>
+            </Row>
+            
 
             <div className="panel">
                 <ul className="ul-style">
                     {enrolledStudents.length >0 ? (
                         enrolledStudents.map((enroll)=> (
-                            <li key={enroll.student_id}>
-                                <Row>
-                                    <Col xs={2} md={2}>{enroll.User.first_name} {enroll.User.last_name}</Col>
-                                    <Col xs={2} md={2}>{enroll.approved===null ? (<Button>Test</Button>) : (enroll.approved)}</Col>
-                                    <Col xs={2} md={2}>{enroll.points===null ? (<p className="margin-0">No points.</p>) : (enroll.points)}</Col>
+                            <li key={enroll.student_id} >
+                                <Row className="align-items-center text-center">
+                                    <Col xs={3} md={3} className="text-center name-item">{enroll.User.first_name} {enroll.User.last_name}</Col>
+                                    <Col xs={3} md={3}>{enroll.approved===null ? (
+                                        <ApprovalPop student_id={enroll.student_id} activities_id={enroll.activities_id} onUpdate={fetchActivities}/>) : 
+                                        enroll.approved === true ? (
+                                        <div className="name-item">Approved</div>) : (
+                                        <div className="name-item">Denied</div>)}
+                                    </Col>
+                                    <Col xs={3} md={3} className="points-item">
+                                    <ButtonGroup className="mb-3 gap-3 justify-content-center">
+                                        <Button>^</Button>
+                                        <span className="text-center">{enroll.points}</span>
+                                        <Button>v</Button>
+                                    </ButtonGroup>
+                                    </Col>
                                 </Row>
                             </li>
                         ))
