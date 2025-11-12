@@ -21,6 +21,10 @@ export default function ActivitiesDash() {
     }, []);
 
     const onEnroll = async(activities_id) => {
+        if (activities.some(act => act.activities_id === activities_id)) {
+        alert("Student is already enrolled in this activity");
+        return;
+    }
         const response = await axios.post("http://localhost:3001/studentenrollment/enroll", {
             activities_id,
         }, {withCredentials: true});
@@ -48,7 +52,6 @@ export default function ActivitiesDash() {
         const response = await axios.get("http://localhost:3001/studentenrollment/points", {
             withCredentials: true,
         });
-        console.log(response.data.points);
         setPoints(response.data.points || 0);
     }
 

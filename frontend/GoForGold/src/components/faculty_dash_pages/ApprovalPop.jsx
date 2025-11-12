@@ -18,7 +18,6 @@ export default function AddActivityPop({student_id, activities_id, onUpdate}) {
     }
 
 
-
     return (
         <>
         <Button variant="dark" size="lg" onClick={handleShow} className="approve-button">

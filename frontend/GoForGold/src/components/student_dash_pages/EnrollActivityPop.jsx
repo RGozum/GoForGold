@@ -20,6 +20,7 @@ export default function EnrollActivityPop({enrollActivity}) {
         setActivities(response.data);
     }
 
+
     useEffect(() => {
         fetchCategories();
     }, [])
@@ -35,6 +36,12 @@ export default function EnrollActivityPop({enrollActivity}) {
         fetchActivities(selectedCategory);
     }, [selectedCategory]);
 
+    useEffect(()=> {
+    if (activities.length > 0 && !selectedActivity) {
+        setSelectedActivity(activities[0].activity_id);
+    }
+    }, [activities]);
+
     const handleClose = () => setShow(false);
     const handleShow = () => {
         setShow(true);
@@ -43,11 +50,10 @@ export default function EnrollActivityPop({enrollActivity}) {
     const handleSubmit = async (e) => {
         e.preventDefault();
         if (!selectedActivity || !selectedCategory) return;
-        console.log('enrollActivity =', enrollActivity);
         await enrollActivity(selectedActivity);
-        handleClose();
         setSelectedActivity("");
-        setSelectedCategory(categories[0].category_id)
+        setSelectedCategory(categories[0].category_id);
+        handleClose();
     }
 
     return (

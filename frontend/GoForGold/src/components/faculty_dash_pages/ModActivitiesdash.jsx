@@ -12,7 +12,6 @@ export default function ModActivitiesDash() {
     const fetchActivities = async() => {
         const response = await axios.get("http://localhost:3001/facultymoderators/activities", 
             {withCredentials: true});
-        console.log(response.data);
         setActivities(response.data);
     }
 
@@ -22,7 +21,26 @@ export default function ModActivitiesDash() {
     
     const enrolledStudents = activities.filter((act)=> act.activity_moderating_id === selectedActivity).flatMap((act)=> act.Activity.Student_Enrollments);
     
-    
+    const addPoints = async(student_id, activities_id, currentPoints) => {
+        let point=currentPoints+1;
+        if (point>5) {
+            point=5
+        }
+        const response = await axios.put(`http://localhost:3001/studentenrollment/${student_id}/${activities_id}/editpoints`, {point}, {withCredentials:true});
+        fetchActivities();
+    }
+
+    const minusPoints = async(student_id, activities_id, currentPoints) => {
+        let point=currentPoints-1;
+        if (point<0) {
+            point=0
+        }
+        const response = await axios.put(`http://localhost:3001/studentenrollment/${student_id}/${activities_id}/editpoints`, {point}, {withCredentials:true});
+        fetchActivities();
+    }
+
+
+
     return (
         <div>
             <Row>
@@ -57,10 +75,12 @@ export default function ModActivitiesDash() {
                                         <div className="name-item">Denied</div>)}
                                     </Col>
                                     <Col xs={3} md={3} className="points-item">
-                                    <ButtonGroup className="mb-3 gap-3 justify-content-center">
-                                        <Button>^</Button>
-                                        <span className="text-center">{enroll.points}</span>
-                                        <Button>v</Button>
+                                    <ButtonGroup className="gap-3 justify-content-center">
+                                        <Button variant="outline-dark"onClick={()=>addPoints(enroll.student_id, enroll.activities_id, enroll.points)}>^</Button>
+                                        <div>
+                                            {enroll.points} points
+                                        </div>
+                                        <Button variant="outline-dark" onClick={()=>minusPoints(enroll.student_id, enroll.activities_id, enroll.points)}>v</Button>
                                     </ButtonGroup>
                                     </Col>
                                 </Row>

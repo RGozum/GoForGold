@@ -13,8 +13,10 @@ router.post("/enroll", isAuthenticated, async(req,res) => {
         student_id,
         activities_id,
         points,
-    });
-    res.json(newEnrollment);
+});
+
+await newEnrollment.save();
+res.json(newEnrollment);
 });
 
 router.delete("/:activities_id/delete", isAuthenticated, async(req,res)=> {
@@ -98,7 +100,7 @@ router.put("/:student_id/:activities_id/approve", isAuthenticated, hasRole(ADMIN
 router.put("/:student_id/:activities_id/editpoints", isAuthenticated, hasRole(ADMIN, FACULTY), async(req,res)=> {
     try {
         const {student_id, activities_id} = req.params;
-        const {points}=req.body;
+        const {point}=req.body;
         const student_enrolled = await Student_Enrollment.findOne({
             where: {
                 student_id, activities_id
@@ -107,7 +109,7 @@ router.put("/:student_id/:activities_id/editpoints", isAuthenticated, hasRole(AD
 
         if (!student_enrolled) return res.status(404).json({message:"Not found"});
 
-        student_enrolled.points=points;
+        student_enrolled.points=point;
         await student_enrolled.save();
 
         res.json({message: "Points edited."});
