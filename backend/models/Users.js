@@ -35,6 +35,14 @@ module.exports = (sequelize, DataTypes) => {
             type:DataTypes.STRING,
             allowNull:true,
             unique:true,
+        },
+        token: {
+            type: DataTypes.STRING,
+            allowNull: true
+        },
+        token_created_at: {
+            type: DataTypes.DATE,
+            allowNull: true,
         }
     }, {
         freezeTableName: true,

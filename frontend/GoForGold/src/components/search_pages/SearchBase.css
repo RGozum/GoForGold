@@ -1,0 +1,27 @@
+
+.search {
+    background-color:#c5c4c4;
+    max-height: 300px;
+    margin: 0 auto;
+    padding: 16px;
+    overflow-y: auto;
+    border: 1px solid #ccc;  
+    margin-bottom: 25px;
+}
+
+.results {
+    background-color:#c5c4c4;
+    max-height: 300px;
+    margin: 0 auto;
+    padding: 16px;
+    overflow-y: auto;
+    border: 1px solid #ccc;  
+    margin-bottom: 25px;
+
+}
+
+.results .table {
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    border: 1px solid #000000;
+    background-color: transparent !important;
+}

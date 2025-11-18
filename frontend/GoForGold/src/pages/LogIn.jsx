@@ -1,6 +1,6 @@
 import React, {useState, useEffect, useContext} from 'react';
-import {useNavigate} from "react-router-dom";
-import {Container, Form, InputGroup, Button} from 'react-bootstrap';
+import {useNavigate, Link} from "react-router-dom";
+import {Container, Form, InputGroup, Button, Row, Col} from 'react-bootstrap';
 import axios from "axios";
 import { AuthContext } from '../AuthContext';
 
@@ -95,6 +95,12 @@ export default function LogIn() {
                     Sign in with Google
                 </Button>
             </Form>
+            <Row>
+                <Col>
+                     <Link to="/requestreset">Forgot Password?</Link>
+
+                </Col>
+            </Row>
 
             </Container>
             

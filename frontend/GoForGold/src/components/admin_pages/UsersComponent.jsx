@@ -1,4 +1,5 @@
 import React, {useState, useEffect} from 'react';
+import { Link } from 'react-router';
 import axios from 'axios';
 import { Button, Form } from 'react-bootstrap';
 
@@ -74,7 +75,9 @@ useEffect(() => {
                         {users.map((us) => (
                             <li key = {us.user_id} className="scroll-item">
                                 <span className= {`${us.active ? "active" : "inactive"}`}>
-                                    {us.first_name} {us.last_name}
+                                    <Link to={`/profile/${us.user_id}`} className="name-link">
+                                        {us.first_name} {us.last_name}
+                                    </Link>
                                 </span>
                                     <Button variant="dark" size="sm" onClick={() => archiveUser(us.user_id)} className="button">
                                          &times;

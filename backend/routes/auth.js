@@ -6,6 +6,8 @@ const bcrypt = require('bcrypt');
 const {createToken, verifyToken} = require('../utils/jwt');
 const passport = require('passport');
 
+const nodemailer = require('nodemailer');
+
 router.post('/login', async (req,res,next) => {
     const {email_address,password} = req.body;
     try {        
@@ -16,6 +18,10 @@ router.post('/login', async (req,res,next) => {
 
         if (!user) {
             return res.status(401).json({error: "User does not exist."});
+        }
+
+        if (!user.active) {
+            return res.status(404).json({error: "User's account is not active."});
         }
 
         const match = await bcrypt.compare(password, user.password);
@@ -98,5 +104,57 @@ router.get('/google/callback',
 );
 
 router.get('/login/failed', (req,res) => res.status(401).json({message: "Failed to authenticate"}));
+
+router.get('/request-reset', async (req,res)=> {
+    const {email_address}=req.body;
+
+    try {        
+        const user = await Users.findOne({
+            where: {email_address}});
+
+        if (!user) {
+            return res.status(401).json({error: "User does not exist."});
+        }
+
+        if (!user.active) {
+            return res.status(404).json({error: "User's account is not active."});
+        }
+
+        const otp = Math.floor(10000+ Math.random() * 90000).toString();
+        user.token=otp;
+        user.token_created_at= new Date();
+        await user.save();
+
+
+        const transporter = nodemailer.createTransport({
+            service: 'gmail',
+            auth: {
+                user: process.env.GOOGLE_EMAIL,
+                pass: process.env.GOOGLE_PASSWORD
+            },
+        });
+        
+        const mailOptions ={
+            from: process.env.GOOGLE_EMAIL,
+            to: email_address,
+            subject: "Go For Gold - Password Reset"
+
+        }
+        
+        
+
+        return res.json({message: "Login successful!", user:{
+            user_id: user.user_id,
+            email_address: user.email_address,
+            user_role: user.User_Role?.user_role,
+            
+        },
+    });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({message: 'Server error during login'});
+    }
+    
+})
 
 module.exports = router;

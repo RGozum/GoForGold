@@ -7,6 +7,9 @@ import AccountCreation from "./pages/AccountCreation.jsx";
 import LogIn from "./pages/LogIn.jsx";
 import StudentDash from "./pages/StudentDash.jsx";
 import FacultyDash from "./pages/FacultyDash.jsx";
+import Search from "./pages/Search.jsx";
+import ProfilePage from "./pages/Profile.jsx";
+import SendOTP from "./pages/SendOTP.jsx";
 
 import ProtectedRoute from "./components/ProtectedRoute";
 
@@ -16,6 +19,7 @@ const router = createBrowserRouter([
     element: <App />,
     children: [
       {path: "login", element: <LogIn />},
+      {path: "requestreset", element: <SendOTP />},
       {
         path: "adminpanel",
         element: (
@@ -23,6 +27,14 @@ const router = createBrowserRouter([
               <AdminPanel />
           </ProtectedRoute>
         ),
+      },
+      {
+        path: "search",
+        element: (
+          <ProtectedRoute allowedRoles={["Administrator"]}>
+            <Search />
+          </ProtectedRoute>
+        )
       },
       {
         path: "accountcreation",
@@ -45,6 +57,14 @@ const router = createBrowserRouter([
         element: (
           <ProtectedRoute allowedRoles={["Administrator", "Faculty"]}>
             <FacultyDash />
+          </ProtectedRoute>
+        )
+      },
+      {
+        path: "/profile/:user_id",
+        element: (
+          <ProtectedRoute allowedRoles={["Administrator"]}>
+            <ProfilePage />
           </ProtectedRoute>
         )
       }
