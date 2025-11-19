@@ -10,6 +10,7 @@ import FacultyDash from "./pages/FacultyDash.jsx";
 import Search from "./pages/Search.jsx";
 import ProfilePage from "./pages/Profile.jsx";
 import SendOTP from "./pages/SendOTP.jsx";
+import ResetPassword from "./pages/ResetPassword.jsx";
 
 import ProtectedRoute from "./components/ProtectedRoute";
 
@@ -20,6 +21,7 @@ const router = createBrowserRouter([
     children: [
       {path: "login", element: <LogIn />},
       {path: "requestreset", element: <SendOTP />},
+      {path: "resetpassword", element: <ResetPassword />},
       {
         path: "adminpanel",
         element: (

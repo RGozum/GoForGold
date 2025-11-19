@@ -27,7 +27,7 @@ export default function LogIn() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const data = {email_address: email_address, password}
+        const data = {email_address: email_address, password};
 
         try {
             const response = await axios.post("http://localhost:3001/auth/login",
