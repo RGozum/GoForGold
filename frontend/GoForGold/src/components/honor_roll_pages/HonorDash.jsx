@@ -44,9 +44,23 @@ export default function HonorDash() {
     }, []);
 
     const handleChange=(index, field, value) => {
-        const updated=[...userRows];
+        const updated=[...honorRows];
         updated[index][field]=value;
+
+        if (field === "first_name" || field === "last_name") {
+            const first_name= updated[index].first_name.trim().toLowerCase();
+            const last_name=updated[index].last_name.trim().toLowerCase();
+
+            const matchedStudent = students.find(
+                (s) =>
+                    (s.first_name ||"").toString().trim().toLowerCase() === first_name &&
+                    (s.last_name || "").toString().trim().toLowerCase() === last_name
+            ); 
+            updated[index].student_id=matchedStudent ? Number(matchedStudent.user_id) : "";
+
+        }
         setHonorRows(updated);
+
     };
 
     const handleRemoveRow = (index) => {
@@ -104,10 +118,17 @@ export default function HonorDash() {
          });
     };
 
+    const validateRow = (row) => {
+        return (
+            row.student_id && row.honor_roll_id && row.grade_id && row.quarter
+        );
+    }
+
+    const allValid = honorRows.length > 0 && honorRows.every(validateRow)
+
     const handleSubmit = async (e) => {
             try {
                 e.preventDefault();
-
                 await axios.post("http://localhost:3001/honorlist/bulk", {honorList: honorRows}, {withCredentials: true});
                 alert("Honor Roll created successfully!");
                 setHonorRows([]);
@@ -129,19 +150,18 @@ export default function HonorDash() {
                 ref={fileInputRef}
                 onChange={handleCSVUpload}
                 style={{display:"none"}} />
-
-
                 </Col>
             <Form>
                 {honorRows.map((honor,index)=> (
-                    <Row key={index} className="align-items-center">
+                    <Row key={index} className="align-items-center mt-2">
                         <Col md={2}>
                             <Form.Control 
                                 type="text"
                                 placeholder="First Name"
                                 value={honor.first_name || ""}
                                 onChange={(e)=> handleChange(index, "first_name", e.target.value)}
-                            />
+                                isInvalid={!honor.student_id}
+                           />
                         </Col>
 
                         <Col md={2}>
@@ -150,6 +170,8 @@ export default function HonorDash() {
                                 placeholder="Last Name"
                                 value={honor.last_name || ""}
                                 onChange={(e)=> handleChange(index, "last_name", e.target.value)}
+                                isInvalid={!honor.student_id}
+
                             />
                         </Col>
 
@@ -157,7 +179,9 @@ export default function HonorDash() {
                             <Form.Select 
                                 value={honor.honor_roll_id || ""}
                                 onChange={(e)=> handleChange(index, "honor_roll_id", e.target.value)}
-                            >
+                                isInvalid={!honor.honor_roll_id}
+
+                                >
                                 <option value="">Select Honor Roll</option>
                                 {honorRoll.map(h => (
                                     <option key={h.honor_roll_id} value={h.honor_roll_id}>
@@ -171,6 +195,7 @@ export default function HonorDash() {
                             <Form.Select 
                                 value={honor.grade_id || ""}
                                 onChange={(e)=> handleChange(index, "grade_id", e.target.value)}
+                                isInvalid={!honor.grade_id}
                             >
                                 <option value="">Grade</option>
                                 {grade.map(g => (
@@ -185,6 +210,7 @@ export default function HonorDash() {
                             <Form.Select 
                                 value={honor.quarter || ""}
                                 onChange={(e)=> handleChange(index, "quarter", e.target.value)}
+                                isInvalid={!honor.quarter}
                             >
                                 <option value="">Quarter</option>
                                 {quarters.map(q => (
@@ -206,7 +232,7 @@ export default function HonorDash() {
                 ))}
                 <Row className="mt-3">
                     <Col>
-                        <Button variant="primary" onClick={handleSubmit}>
+                        <Button variant="primary" onClick={handleSubmit} disabled={!allValid}>
                             Submit All
                         </Button>
                     </Col>

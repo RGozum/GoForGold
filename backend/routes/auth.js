@@ -172,8 +172,6 @@ router.post('/resetpassword', async(req,res)=> {
     const {email_address, newpassword} = req.body;
     let {token}=req.body;
     token=String(token).trim();
-
-    
     try {
         const user = await Users.findOne({
             where: {email_address}

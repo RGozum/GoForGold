@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { Student_Enrollment, Activities, Categories } = require('../models');
+const { Student_Enrollment, Activities, Categories, Honor_List } = require('../models');
 const { isAuthenticated, hasRole } = require('../middleware/authMiddleware');
 const {FACULTY, ADMIN} = require('../config/roles.js')
 
@@ -61,12 +61,19 @@ router.get("/enrolledactivities", isAuthenticated, async(req,res)=> {
 router.get("/points", isAuthenticated, async(req,res)=> {
     try {
         const student_id = req.user.user_id;
-        const totalPoints = await Student_Enrollment.sum("points", {
+        const points = await Student_Enrollment.sum("points", {
             where: {
                 approved: true,
                 student_id
             },
+        });
+
+        const honorPoints= await Honor_List.sum("points", {
+            where: {
+                student_id
+            },
         })
+        const totalPoints=points+honorPoints;
         res.json({points: totalPoints || 0});
     } catch (err) {
         console.error(err);

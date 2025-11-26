@@ -85,7 +85,7 @@ const defineAssociations = (db) => {
         { foreignKey: 'student_id', 
             as: 'student' });
     Attendance.belongsTo(Student_Enrollment, 
-        { foreignKey: 'activity_id', 
+        { foreignKey: 'activity_id_fk', 
             as: 'activity' });
 
     Users.hasMany(Attendance, { 
