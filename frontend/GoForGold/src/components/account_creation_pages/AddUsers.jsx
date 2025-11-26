@@ -12,8 +12,6 @@ export default function AddUsersComponent() {
     const [roles, setRoles]=useState([]);
     const fileInputRef = useRef(null);
 
- 
-
     const fetchRoles = async() => {
         const response = await axios.get("http://localhost:3001/userroles");
         setRoles(response.data)
@@ -40,7 +38,7 @@ export default function AddUsersComponent() {
     const handleRemoveRow = (index) => {
         const updated = userRows.filter((_, i) => i !== index);
         setUserRows(updated);
-    }
+    };
 
     const handleSubmit = async (e) => {
         try {

@@ -1,5 +1,5 @@
 module.exports = (sequelize, DataTypes) => {
-    const HonorList = sequelize.define("HonorList", {
+    const Honor_List = sequelize.define("Honor_List", {
         honor_list_id: {
             type: DataTypes.INTEGER,
             allowNull: false,
@@ -18,14 +18,18 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.INTEGER,
             allowNull: false,
         },
-        grade: {
+        grade_id: {
             type: DataTypes.INTEGER,
             allowNull: false,
         }, 
+        points: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+        }
     }, {
         freezeTableName: true,
         timestamps: false
     });
-    return HonorList;
+    return Honor_List;
 
 };

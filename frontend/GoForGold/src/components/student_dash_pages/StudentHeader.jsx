@@ -10,7 +10,7 @@ import './AdminHeader.css'
 
 
 export default function StudentHeader () {
-    const {logout} = useContext(AuthContext);
+    const {logout, user} = useContext(AuthContext);
     const navigate = useNavigate();
 
     const onLogout = async (e) => {
@@ -18,6 +18,8 @@ export default function StudentHeader () {
         await logout();
         navigate("/login");
     }
+
+
     return (
         <Navbar expand="lg">
             <Container fluid>
@@ -27,7 +29,10 @@ export default function StudentHeader () {
                 <Navbar.Collapse id="navbarScroll">
                     <Nav className="ms-auto">
                         <NavDropdown title={
-                            <img src={ProfilePictureIcon} className="pfp"/>
+                            <div>
+                               <img src={ProfilePictureIcon} className="pfp"/>
+                                <span className="ms-2">{user?.first_name} {user?.last_name}</span>
+                            </div>
                         } id="profile-dropdown" align="end">
 
                             <NavDropdown.Item onClick={onLogout} className="logout-drop">

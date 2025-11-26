@@ -5,6 +5,8 @@ function createToken(user) {
     return jwt.sign(
         {
             user_id: user.user_id,
+            first_name: user.first_name,
+            last_name: user.last_name,
             email: user.email_address,
             user_role: user.User_Role?.user_role || "Unknown"
         },

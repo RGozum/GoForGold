@@ -1,8 +1,8 @@
 
 const defineAssociations = (db) => {
     const { Users, User_Role, Activities, Student_Enrollment,
-         Categories, SchoolYears, HonorRoll, HonorList, Attendance,
-         Faculty_Moderators} =db;
+         Categories, School_Years, Honor_Roll, Honor_List, Attendance,
+         Faculty_Moderators, Student_Grades} =db;
 
     //User has one role, User roles belong to many user
     User_Role.hasMany(Users, {
@@ -64,19 +64,19 @@ const defineAssociations = (db) => {
     });
 
     //Activities have one year, School years have many activities
-    Activities.belongsTo(SchoolYears, { foreignKey: 'year_id' });
-    SchoolYears.hasMany(Activities, {
+    Activities.belongsTo(School_Years, { foreignKey: 'year_id' });
+    School_Years.hasMany(Activities, {
         foreignKey: 'year_id',
     });
 
     //Users can have many honor rolls, Honor rolls go to many students
-    Users.belongsToMany(HonorRoll, {
-        through: HonorList,
+    Users.belongsToMany(Honor_Roll, {
+        through: Honor_List,
         foreignKey: 'student_id',
         otherKey: 'honor_roll_id'
     });
-    HonorRoll.belongsToMany(Users, {
-        through: HonorList,
+    Honor_Roll.belongsToMany(Users, {
+        through: Honor_List,
         foreignKey: 'honor_roll_id',
         otherKey: 'student_id'
     });
@@ -93,10 +93,20 @@ const defineAssociations = (db) => {
     Activities.hasMany(Attendance, { 
         foreignKey: 'activity_id' });
 
-    SchoolYears.hasMany(HonorRoll);
-    HonorRoll.belongsTo(SchoolYears, {
+    School_Years.hasMany(Honor_Roll, {
         foreignKey: 'year_id_fk'
     });
+    Honor_Roll.belongsTo(School_Years, {
+        foreignKey: 'year_id_fk'
+    });
+
+    Student_Grades.hasMany(Honor_List, {
+        foreignKey: 'grade_id',
+    });
+
+    Honor_List.belongsTo(Student_Grades, {
+        foreignKey: 'grade_id',
+    })
 }
 
 module.exports = (defineAssociations);

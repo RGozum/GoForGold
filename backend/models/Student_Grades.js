@@ -1,28 +1,23 @@
 module.exports = (sequelize, DataTypes) => {
-    const Honor_Roll = sequelize.define("Honor_Roll", {
-        honor_roll_id: {
+    const Student_Grades = sequelize.define("Student_Grades", {
+        grade_id: {
             type: DataTypes.INTEGER,
             allowNull: false,
             primaryKey: true,
             autoIncrement: true,
         },
-        type: {
-            type: DataTypes.STRING,
-            allowNull: false,
-        },
-        description: {
-            type: DataTypes.STRING,
-        },
-        year_id_fk: {
+        year_grade: {
             type: DataTypes.INTEGER,
             allowNull: false,
-            defaultValue: 1,
-        }, 
+        },
+        grade_name: {
+            type: DataTypes.STRING,
+            allowNull: false,
+        }
     }, {
         freezeTableName: true,
-        tableName: 'honor_roll',
         timestamps: false
     });
-    return Honor_Roll;
+    return Student_Grades;
 
 };

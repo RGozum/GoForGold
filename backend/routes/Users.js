@@ -123,7 +123,8 @@ router.put("/:user_id/permissions", isAuthenticated, hasRole(ADMIN), async(req, 
     include: [User_Role],
     attributes: {
       exclude: ['password']
-    }
+    },
+    order: [['last_name', 'ASC'], ['first_name', 'ASC']]
   });
 
   if (!user) return res.status(404).json({message: "User not found."});

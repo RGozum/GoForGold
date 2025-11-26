@@ -7,7 +7,6 @@ const {createToken, verifyToken} = require('../utils/jwt');
 const passport = require('passport');
 
 const nodemailer = require('nodemailer');
-const { useReducer } = require('react');
 
 router.post('/login', async (req,res,next) => {
     const {email_address,password} = req.body;

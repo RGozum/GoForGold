@@ -32,7 +32,10 @@ export default function AdminHeader () {
 
                     <Nav className="d-flex align-items-center gap-3">
                         <NavDropdown title={
-                            <img src={ProfilePictureIcon} className="pfp"/>
+                            <div>
+                               <img src={ProfilePictureIcon} className="pfp"/>
+                                <span className="ms-2">{user?.first_name} {user?.last_name}</span>
+                            </div>
                         } id="profile-dropdown" align="end">
 
                             <NavDropdown.Item onClick={onLogout} className="logout-drop">

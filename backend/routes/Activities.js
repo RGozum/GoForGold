@@ -20,7 +20,8 @@ router.get("/:category_id/active", async(req,res) => {
   const {category_id}=req.params;
   try {
     const activeActivities = await Activities.findAll({
-      where: {category_id, active: true}
+      where: {category_id, active: true},
+      order: [['activity_name','ASC']]
     });
     res.json(activeActivities);
   }catch (err){ 

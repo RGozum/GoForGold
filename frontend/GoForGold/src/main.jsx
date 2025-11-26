@@ -11,6 +11,7 @@ import Search from "./pages/Search.jsx";
 import ProfilePage from "./pages/Profile.jsx";
 import SendOTP from "./pages/SendOTP.jsx";
 import ResetPassword from "./pages/ResetPassword.jsx";
+import HonorRoll from "./pages/HonorRoll.jsx";
 
 import ProtectedRoute from "./components/ProtectedRoute";
 
@@ -27,6 +28,14 @@ const router = createBrowserRouter([
         element: (
           <ProtectedRoute allowedRoles={["Administrator"]}>
               <AdminPanel />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "honorroll",
+        element: (
+          <ProtectedRoute allowedRoles={["Administrator"]}>
+              <HonorRoll />
           </ProtectedRoute>
         ),
       },

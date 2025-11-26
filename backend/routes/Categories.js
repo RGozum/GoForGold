@@ -32,7 +32,6 @@ router.post("/", isAuthenticated, hasRole(ADMIN), async (req,res) => {
     console.error(err);
     res.status(500).json({err: "Failed to create category"});
   } 
-
 });
 
 router.put("/:category_id/archive", isAuthenticated, hasRole(ADMIN), async (req, res) => {

@@ -1,4 +1,4 @@
-import {Button, Modal, Form} from "react-bootstrap";
+import {Button, Modal, Form, Row, Col} from "react-bootstrap";
 import React, {useState, useEffect} from 'react';
 import axios from 'axios';
 
@@ -7,6 +7,7 @@ export default function EnrollActivityPop({enrollActivity}) {
     const [selectedCategory, setSelectedCategory] = useState("");
     const [selectedActivity, setSelectedActivity] = useState("");
 
+    const [searchActivity, setSearchActivity]=useState("");
     const [categories, setCategories] = useState([]);
     const fetchCategories = async () => {
         const response = await axios.get("http://localhost:3001/categories/active");
@@ -19,6 +20,10 @@ export default function EnrollActivityPop({enrollActivity}) {
         const response = await axios.get(`http://localhost:3001/activities/${cat_id}/active`);
         setActivities(response.data);
     }
+
+    const filteredActivities = activities.filter(act=>
+        act.activity_name.toLowerCase().includes(searchActivity.toLowerCase())
+    )
 
 
     useEffect(() => {
@@ -68,7 +73,23 @@ export default function EnrollActivityPop({enrollActivity}) {
                     <Modal.Title>Add Activity</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
+
+                    
                     <Form onSubmit={handleSubmit} className="form-inline">
+                         <Row>
+                            <Col></Col>
+                            <Col xs={5}>
+                            <Form.Group className="mt-2">
+                            <Form.Control 
+                            type ="text"
+                            placeholder="Search..."
+                            value={searchActivity}
+                            onChange={(e)=>setSearchActivity(e.target.value)} />
+                        </Form.Group>
+                            </Col>
+                         </Row>
+                         
+                        
                         <Form.Group className="mb-3">
                             <Form.Label>Category</Form.Label>
                             <Form.Select value={selectedCategory} onChange={(e)=> setSelectedCategory(Number(e.target.value))}>
@@ -80,14 +101,17 @@ export default function EnrollActivityPop({enrollActivity}) {
                             </Form.Select>
                         </Form.Group>
 
-                        <Form.Group>
+
+                        <Form.Group className="mt-2">
                             <Form.Label>Activities in Category</Form.Label>
                             <Form.Select value={selectedActivity} onChange={(e)=>setSelectedActivity(Number(e.target.value))}>
-                                {activities.map((act)=> (
-                                    <option key={act.activity_id} value={act.activity_id}>
+                                {filteredActivities.length>0 ? (
+                                    filteredActivities.map((act)=> (
+                                        <option key={act.activity_id} value={act.activity_id}>
                                         {act.activity_name}
-                                    </option>
-                                ))}
+                                        </option> 
+                                    ))
+                                ): (<option disabled>No matching activities</option>)}
                             </Form.Select>
                         </Form.Group>
 

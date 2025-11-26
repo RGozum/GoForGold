@@ -44,6 +44,15 @@ app.use('/studentenrollment', studentEnrollmentRoutes);
 const facultyModeratorsRoutes = require('./routes/Faculty_Moderators');
 app.use('/facultymoderators',facultyModeratorsRoutes);
 
+const honorRollRoutes = require('./routes/Honor_Roll');
+app.use('/honorroll',honorRollRoutes);
+
+const honorListRoutes = require('./routes/Honor_List');
+app.use('/honorlist', honorListRoutes);
+
+const studentGradesRoutes = require('./routes/Student_Grades');
+app.use('/studentgrades',studentGradesRoutes);
+
 sequelize.authenticate().then(() => {
    console.log('Connection has been established successfully.');
 }).catch((error) => {

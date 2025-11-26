@@ -1,5 +1,5 @@
 module.exports = (sequelize, DataTypes) => {
-    const SchoolYears = sequelize.define("SchoolYears", {
+    const School_Years = sequelize.define("School_Years", {
         year_id: {
             type: DataTypes.INTEGER,
             allowNull: false,
@@ -14,6 +14,6 @@ module.exports = (sequelize, DataTypes) => {
         freezeTableName: true,
         timestamps: false
     });
-    return SchoolYears;
+    return School_Years;
 
 };

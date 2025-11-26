@@ -39,7 +39,7 @@ Object.keys(db).forEach(modelName => {
   }
 });
 
-const defineAssociations = require('./Associations');
+const defineAssociations = require('./associations');
 defineAssociations(db);
 
 db.sequelize = sequelize;
