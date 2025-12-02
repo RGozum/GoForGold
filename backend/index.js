@@ -53,6 +53,9 @@ app.use('/honorlist', honorListRoutes);
 const studentGradesRoutes = require('./routes/Student_Grades');
 app.use('/studentgrades',studentGradesRoutes);
 
+const attendanceRoutes = require('./routes/Attendance');
+app.use('/attendance', attendanceRoutes);
+
 sequelize.authenticate().then(() => {
    console.log('Connection has been established successfully.');
 }).catch((error) => {

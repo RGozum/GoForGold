@@ -6,13 +6,15 @@ module.exports = (sequelize, DataTypes) => {
             primaryKey: true,
             autoIncrement: true,
         },
-        date: {
+        attendance_date: {
             type: DataTypes.DATE,
             allowNull: false,
+            field: 'attendance_date'
         },
         activity_id_fk: {
-            type: DataTypes.INTEGER,
+             type: DataTypes.INTEGER,
             allowNull: false,
+            field: 'activity_id_fk'
         },
         student_id: {
             type: DataTypes.INTEGER,
