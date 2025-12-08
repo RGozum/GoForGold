@@ -56,6 +56,8 @@ export default function LogIn() {
         window.location.href = "http://localhost:3001/auth/google";
     }
     return (
+        <div>
+            <h3>Go for Gold!</h3>
         <Container className="d-flex justify-content-center align-items-center"
         style={{minHeight:'100vh'}}>
             
@@ -106,5 +108,7 @@ export default function LogIn() {
             </Container>
             
         </Container>
+        </div>
+
     )
 }

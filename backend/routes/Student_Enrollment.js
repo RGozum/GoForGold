@@ -2,7 +2,8 @@ const express = require('express');
 const router = express.Router();
 const { Student_Enrollment, Activities, Categories, Honor_List } = require('../models');
 const { isAuthenticated, hasRole } = require('../middleware/authMiddleware');
-const {FACULTY, ADMIN} = require('../config/roles.js')
+const {FACULTY, ADMIN} = require('../config/roles.js');
+
 
 router.post("/enroll", isAuthenticated, async(req,res) => {
     const student_id = req.user.user_id;
@@ -14,7 +15,6 @@ router.post("/enroll", isAuthenticated, async(req,res) => {
         activities_id,
         points,
 });
-
 await newEnrollment.save();
 res.json(newEnrollment);
 });

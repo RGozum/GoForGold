@@ -1,4 +1,4 @@
-import {Container, Row, Col} from 'react-bootstrap';
+import {Container, Row, Col, Button} from 'react-bootstrap';
 import React, {useContext} from 'react';
 
 import {useNavigate} from "react-router-dom";
@@ -27,6 +27,9 @@ export default function Unauthorized() {
             <hr className="mb-5"></hr>
             <p>You do not have the permissions to access this.</p>
             <p>Redirecting you to the correct dashboard...</p>
+            <br></br>
+            <p>...or click below to return to the login page.</p>
+            <Button size="lg" variant="dark" onClick={(e)=>navigate("/login")}>Login page</Button>
             </Container>
             
         </Container>

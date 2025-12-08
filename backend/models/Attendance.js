@@ -1,13 +1,7 @@
 module.exports = (sequelize, DataTypes) => {
     const Attendance = sequelize.define("Attendance", {
-        attendance_id: {
-            type: DataTypes.INTEGER,
-            allowNull: false,
-            primaryKey: true,
-            autoIncrement: true,
-        },
         attendance_date: {
-            type: DataTypes.DATE,
+            type: DataTypes.DATEONLY,
             allowNull: false,
             field: 'attendance_date'
         },
@@ -26,5 +20,4 @@ module.exports = (sequelize, DataTypes) => {
         timestamps: false
     });
     return Attendance;
-
 };

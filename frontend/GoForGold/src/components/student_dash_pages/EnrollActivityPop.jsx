@@ -1,5 +1,6 @@
 import {Button, Modal, Form, Row, Col} from "react-bootstrap";
 import React, {useState, useEffect} from 'react';
+import Select from 'react-select';
 import axios from 'axios';
 
 export default function EnrollActivityPop({enrollActivity}) {
@@ -7,7 +8,6 @@ export default function EnrollActivityPop({enrollActivity}) {
     const [selectedCategory, setSelectedCategory] = useState("");
     const [selectedActivity, setSelectedActivity] = useState("");
 
-    const [searchActivity, setSearchActivity]=useState("");
     const [categories, setCategories] = useState([]);
     const fetchCategories = async () => {
         const response = await axios.get("http://localhost:3001/categories/active");
@@ -15,15 +15,11 @@ export default function EnrollActivityPop({enrollActivity}) {
     }
 
     const [activities, setActivities] = useState([]);
-    const fetchActivities = async(cat_id) => {
-        if (!cat_id) return;
-        const response = await axios.get(`http://localhost:3001/activities/${cat_id}/active`);
-        setActivities(response.data);
-    }
-
-    const filteredActivities = activities.filter(act=>
-        act.activity_name.toLowerCase().includes(searchActivity.toLowerCase())
-    )
+    // const fetchActivities = async(cat_id) => {
+    //     if (!cat_id) return;
+    //     const response = await axios.get(`http://localhost:3001/activities/${cat_id}/active`);
+    //     setActivities(response.data);
+    // };
 
 
     useEffect(() => {
@@ -34,18 +30,26 @@ export default function EnrollActivityPop({enrollActivity}) {
         if (categories.length >0 && selectedCategory==="") {
             setSelectedCategory(categories[0].category_id);
         }
-    }, [categories])
+    }, [categories]);
 
-    useEffect(()=> {
-        if (!selectedCategory) return;
-        fetchActivities(selectedCategory);
+   useEffect(() => {
+        const fetchActivities = async () => {
+            if (!selectedCategory) return;
+
+            const response = await axios.get(
+                `http://localhost:3001/activities/${selectedCategory}/active`
+            );
+            const options = response.data.map(a => ({
+                value: a.activity_id,
+                label: a.activity_name
+            }));
+
+            setActivities(options);
+            setSelectedActivity(options.length > 0 ? options[0] : null);
+        };
+
+        fetchActivities();
     }, [selectedCategory]);
-
-    useEffect(()=> {
-    if (activities.length > 0 && !selectedActivity) {
-        setSelectedActivity(activities[0].activity_id);
-    }
-    }, [activities]);
 
     const handleClose = () => setShow(false);
     const handleShow = () => {
@@ -55,7 +59,7 @@ export default function EnrollActivityPop({enrollActivity}) {
     const handleSubmit = async (e) => {
         e.preventDefault();
         if (!selectedActivity || !selectedCategory) return;
-        await enrollActivity(selectedActivity);
+        await enrollActivity(selectedActivity.value);
         setSelectedActivity("");
         setSelectedCategory(categories[0].category_id);
         handleClose();
@@ -76,19 +80,7 @@ export default function EnrollActivityPop({enrollActivity}) {
 
                     
                     <Form onSubmit={handleSubmit} className="form-inline">
-                         <Row>
-                            <Col></Col>
-                            <Col xs={5}>
-                            <Form.Group className="mt-2">
-                            <Form.Control 
-                            type ="text"
-                            placeholder="Search..."
-                            value={searchActivity}
-                            onChange={(e)=>setSearchActivity(e.target.value)} />
-                        </Form.Group>
-                            </Col>
-                         </Row>
-                         
+            
                         
                         <Form.Group className="mb-3">
                             <Form.Label>Category</Form.Label>
@@ -101,18 +93,16 @@ export default function EnrollActivityPop({enrollActivity}) {
                             </Form.Select>
                         </Form.Group>
 
-
                         <Form.Group className="mt-2">
                             <Form.Label>Activities in Category</Form.Label>
-                            <Form.Select value={selectedActivity} onChange={(e)=>setSelectedActivity(Number(e.target.value))}>
-                                {filteredActivities.length>0 ? (
-                                    filteredActivities.map((act)=> (
-                                        <option key={act.activity_id} value={act.activity_id}>
-                                        {act.activity_name}
-                                        </option> 
-                                    ))
-                                ): (<option disabled>No matching activities</option>)}
-                            </Form.Select>
+                            <Select 
+                                value={selectedActivity}
+                                options={activities}
+                                onChange={(option)=> {
+                                    setSelectedActivity(option)
+                                }}
+                                isSearchable
+                                />
                         </Form.Group>
 
                         <Button variant="success" type="submit" className="mt-3 w-100">

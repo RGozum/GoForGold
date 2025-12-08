@@ -53,7 +53,7 @@ useEffect(() => {
 
     return (
         <div>
-            <div className = "scrollable-panel-users">
+            <div className = "scrollable-panel-long">
                 <h3 className="title">Users</h3>
                 <Button variant="dark" size="md" href="/accountcreation" className="add-button">
                     + Add Account

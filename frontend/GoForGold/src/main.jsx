@@ -13,6 +13,7 @@ import SendOTP from "./pages/SendOTP.jsx";
 import ResetPassword from "./pages/ResetPassword.jsx";
 import HonorRoll from "./pages/HonorRoll.jsx";
 import Unauthorized from "./pages/Unauthorized.jsx";
+import Attendance from "./pages/Attendance.jsx";
 
 
 import ProtectedRoute from "./components/ProtectedRoute";
@@ -55,6 +56,14 @@ const router = createBrowserRouter([
         element: (
           <ProtectedRoute allowedRoles={["Administrator"]}>
               <AccountCreation />
+          </ProtectedRoute>
+        ),
+      },
+       {
+        path: "attendance",
+        element: (
+          <ProtectedRoute allowedRoles={["Administrator"]}>
+              <Attendance />
           </ProtectedRoute>
         ),
       },
