@@ -39,6 +39,42 @@ export default function AttendancePanel() {
         if (selectedActivity) fetchAttendance();
     }, [selectedActivity]);
 
+
+    const handleCheckboxChange = async (student_id, date, oldValue, idx) => {
+        const newValue = !oldValue;
+
+        // Update local state so UI changes immediately
+        setAttendanceData(prev =>
+            prev.map(student =>
+                student.student_id === student_id
+                    ? {
+                          ...student,
+                          attendance: student.attendance.map((val, i) =>
+                              i === idx ? newValue : val
+                          )
+                      }
+                    : student
+            )
+        );
+
+        console.log("Student ID: "+ student_id +"\n Date: "+ date + "\n New Value"+newValue);
+        // Send update to server
+        try {
+            await axios.post(
+                "http://localhost:3001/attendance/update-attendance",
+                {
+                    student_id,
+                    activity_id: selectedActivity,
+                    date,
+                    value: newValue
+                },
+                { withCredentials: true }
+            );
+        } catch (error) {
+            console.error("Error updating attendance:", error);
+        }
+    };
+
 return (
     <div>
         <Row>
@@ -80,7 +116,15 @@ return (
 
                     {student.attendance.map((value, idx) => (
                     <td key={idx}>
-                        <input type="checkbox" checked={value} readOnly />
+                        <input type="checkbox" checked={value} 
+                            onChange={() =>
+                                handleCheckboxChange(
+                                    student.student_id,
+                                    dates[idx],
+                                    value,
+                                    idx
+                                )
+                            } />
                     </td>
                     ))}
                 </tr>

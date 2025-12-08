@@ -99,7 +99,11 @@ function formatData(rawData) {
   }
   console.log("JSON Stringified:", JSON.stringify(formattedData));
   return formattedData;
-}
+};
+
+router.post("/update-attendance", async (req,res)=> {
+  
+})
 
 
 // const exists = data.some(item =>
