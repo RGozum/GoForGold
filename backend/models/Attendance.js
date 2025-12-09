@@ -3,16 +3,19 @@ module.exports = (sequelize, DataTypes) => {
         attendance_date: {
             type: DataTypes.DATEONLY,
             allowNull: false,
-            field: 'attendance_date'
+            field: 'attendance_date',
+            primaryKey: true
         },
         activity_id_fk: {
              type: DataTypes.INTEGER,
             allowNull: false,
-            field: 'activity_id_fk'
+            field: 'activity_id_fk',
+            primaryKey: true
         },
         student_id: {
             type: DataTypes.INTEGER,
             allowNull: false,
+            primaryKey: true
         }, 
     }, {
         freezeTableName: true,

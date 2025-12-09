@@ -101,79 +101,32 @@ function formatData(rawData) {
   return formattedData;
 };
 
-router.post("/update-attendance", async (req,res)=> {
-  
-})
+router.post("/update-attendance", isAuthenticated, hasRole(ADMIN, FACULTY), async (req,res)=> {
+  const {student_id, activity_id, date,value}=req.body;
 
-
-// const exists = data.some(item =>
-//   item.id === targetId && item.date === targetDate
-// );
-
-// console.log(exists);  // true or false
-
-
-
-
-
-
-
-// router.get("/:activity_id", isAuthenticated, hasRole(ADMIN, FACULTY), async (req,res) => {
-//   try {
-//     const {activity_id} = req.params;
-    
-//     const isModerator = await Faculty_Moderators.findOne({
-//       where: {
-//         faculty_id: req.user.user_id,
-//         activity_moderating_id: activity_id
-//       }
-//     });
-
-//      if (!isModerator) return res.status(403).json({ message: "Not authorized" });
-
-//      const attendance = await Attendance.findAll({
-//       where: {
-//         activity_id_fk: activity_id
-//       }
-//      })
-
-//      res.json(attendance);
-//   } catch (err) {
-//     console.error(err);
-//    return res.status(500).json({err: "Failed to retrieve attendance"});
-// }
-//   const attendance = await Attendance.findAll();
-//   res.json(attendance);
-// });
-
-// router.post("/add-date", isAuthenticated, hasRole(FACULTY, ADMIN), async(req,res) => {
-//   try {
-//     const {activity_id, date} = req.body;
-
-//     const isModerator = await Faculty_Moderators.findOne({
-//       where: {
-//         faculty_id: req.user.user_id,
-//         activity_id: activity_id
-//       }
-//     });
-
-//      if (!isModerator) return res.status(403).json({ message: "Not authorized" });
-
-//      const enrollments = await Student_Enrollment.findAll({where: {activity_id}});
-
-//      const attendanceData = enrollments.map(s => ({
-//       student_id: s.student_id,
-//       activity_id,
-//       date,
-//       present: false
-//      }));
-
-//      await Attendance.bulkCreate(attendanceData, {ignoreDuplicates: true});
-//      res.json({message: "Date has been added."});
-//   } catch (err) {
-//     console.error(err);
-//     res.status(500).json({err: "Failed to add dates."});
-//   }
-//  })
+  try {
+  if (value === true) {
+    const newAttendance = await Attendance.create({
+      attendance_date: date,
+      activity_id_fk: activity_id,
+      student_id
+    })
+    await newAttendance.save();
+    console.log("Successful!")
+    return res.json(newAttendance);
+  } else {
+    await Attendance.destroy({
+      where: { student_id, 
+        activity_id_fk: activity_id,
+        attendance_date: date
+       },
+    });
+    console.log("Successful!")
+    return res.status(200).json({ message: "Attemdance deleted successfully" });
+  }} catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: "Failed to update attendance" });
+  }
+});
 
 module.exports = router;

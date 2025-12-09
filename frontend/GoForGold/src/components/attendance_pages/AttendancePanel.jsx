@@ -10,22 +10,39 @@ export default function AttendancePanel() {
     const [dates, setDates]=useState([]);
     const [attendanceData, setAttendanceData]=useState([]);
     
+
+
+    function formatYYYYMMDD(date) {
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, "0");
+        const day = String(date.getDate()).padStart(2, "0");
+        return `${year}-${month}-${day}`;
+    }
+
+    const [sundayDate,setSundayDate]=useState(()=> {
+        const currentDate = new Date();
+        const sunday = new Date();
+        sunday.setDate(currentDate.getDate()-currentDate.getDay());
+        return sunday;
+    })
+
+    
+
     const fetchActivities = async() => {
         const response = await axios.get("http://localhost:3001/facultymoderators/activities", 
             {withCredentials: true});
         setActivities(response.data);
-        if (response.data.length) setSelectedActivity(response.data[0].activity_id);
+        if (response.data.length) setSelectedActivity(response.data[0].activity_moderating_id);
         console.log(response.data)
     }
 
     const fetchAttendance = async() => {
         const response = await axios.get("http://localhost:3001/attendance/attendancedata",
-            {params: {startDate:"2025-12-03",
-            activity_id:selectedActivity
+            {params: {startDate: formatYYYYMMDD(sundayDate),
+            activity_id: selectedActivity
         }}, {
             withCredentials:true
         });
-        // setAttendance(response.data);
         setDates(response.data.dates);
         setAttendanceData(response.data.attendanceData);
         console.log(response.data);
@@ -37,7 +54,7 @@ export default function AttendancePanel() {
     
     useEffect(()=> {
         if (selectedActivity) fetchAttendance();
-    }, [selectedActivity]);
+    }, [selectedActivity,sundayDate]);
 
 
     const handleCheckboxChange = async (student_id, date, oldValue, idx) => {
@@ -57,7 +74,6 @@ export default function AttendancePanel() {
             )
         );
 
-        console.log("Student ID: "+ student_id +"\n Date: "+ date + "\n New Value"+newValue);
         // Send update to server
         try {
             await axios.post(
@@ -75,6 +91,25 @@ export default function AttendancePanel() {
         }
     };
 
+    const subtractToSunday=async()=> {
+        setSundayDate(prev => {
+            const newDate = new Date(prev);
+            newDate.setDate(newDate.getDate()-7);
+            return newDate;
+        }
+        )
+    }
+
+    
+    const addToSunday=async()=> {
+        setSundayDate(prev => {
+            const newDate = new Date(prev);
+            newDate.setDate(newDate.getDate()+7);
+        return newDate;
+        }
+        )
+    }
+
 return (
     <div>
         <Row>
@@ -83,7 +118,6 @@ return (
                     className="mb-3"
                     value={selectedActivity} 
                     onChange={(e)=> setSelectedActivity(Number(e.target.value))}>
-                    <option value="">Select an Activity</option>
                     {activities.map((act)=> (
                         <option key={act.activity_moderating_id} value={act.activity_moderating_id}>
                             {act.Activity.activity_name}
@@ -91,15 +125,26 @@ return (
                     ))}
                 </Form.Select>
             </Col>
-            <Col>
-                <Button className="mb-3">
-                    Add Date
-                </Button>
-            </Col>
+            
         </Row>
     <div className="panel">
         
-        <table>
+        <Row className="mb-3">
+            <Col className="d-flex align-items-center justify-content-center gap-3">
+                <Button variant="dark" size="sm" onClick={()=> subtractToSunday()}>
+                    {'<'}
+                </Button>
+
+                    <h3 className="m-0">Week of {dates[0]}</h3>
+ 
+                 <Button variant="dark" size="sm" onClick={()=> addToSunday()}>
+                    {'>'}
+                </Button>
+            </Col>
+        </Row>
+        
+        <Row>
+            <Table bordered striped>
             <thead>
                 <tr>
                 <th>Student</th>
@@ -130,30 +175,10 @@ return (
                 </tr>
                 ))}
             </tbody>
-            </table>
-
-
-
-
-
-
-
-
-         {/* <Table striped bordered>
-            <thead>
-                <tr>
-                    <th>Student</th>
-                    {dates.map(date => (
-                        <th key={date}>{date}</th>
-                    ))}
-                </tr>
-            </thead>
-            <tbody>
-                
-            </tbody>
-         </Table> */}
-    
-    </div>
+            </Table>
+ 
+        </Row>
+           </div>
      </div>
 );
 }
