@@ -76,11 +76,11 @@ export default function ModActivitiesDash() {
                                     </Col>
                                     <Col xs={3} md={3} className="points-item">
                                     <ButtonGroup className="gap-3 justify-content-center">
-                                        <Button variant="outline-dark"onClick={()=>addPoints(enroll.student_id, enroll.activities_id, enroll.points)}>^</Button>
+                                        <Button variant="outline-dark" disabled={enroll.approved===null} onClick={()=>addPoints(enroll.student_id, enroll.activities_id, enroll.points)}>^</Button>
                                         <div>
-                                            {enroll.points} points
+                                            {enroll.approved===null ? (<p>Not approved.</p>) : (<p>{enroll.points} points.</p>)}
                                         </div>
-                                        <Button variant="outline-dark" onClick={()=>minusPoints(enroll.student_id, enroll.activities_id, enroll.points)}>v</Button>
+                                        <Button variant="outline-dark" disabled={enroll.approved===null} onClick={()=>minusPoints(enroll.student_id, enroll.activities_id, enroll.points)}>v</Button>
                                     </ButtonGroup>
                                     </Col>
                                 </Row>

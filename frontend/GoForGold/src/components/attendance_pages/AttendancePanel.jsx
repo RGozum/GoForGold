@@ -1,4 +1,6 @@
 import {Button, Row, Col, Form, Table} from 'react-bootstrap';
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 import React, {useState, useEffect} from 'react';
 import axios from 'axios';
@@ -6,9 +8,16 @@ import axios from 'axios';
 export default function AttendancePanel() {
     const [selectedActivity, setSelectedActivity]=useState("");
     const [activities, setActivities] = useState([]);
-    const [attendance, setAttendance]=useState([]);
     const [dates, setDates]=useState([]);
     const [attendanceData, setAttendanceData]=useState([]);
+
+    const [selectedDate, setSelectedDate]=useState(new Date());
+    const selectDate = (date) => {
+        setSelectedDate(date);
+        const sunday = new Date(date);
+        sunday.setDate(date.getDate() - date.getDay());
+        setSundayDate(sunday);
+    };
     
 
 
@@ -100,7 +109,6 @@ export default function AttendancePanel() {
         )
     }
 
-    
     const addToSunday=async()=> {
         setSundayDate(prev => {
             const newDate = new Date(prev);
@@ -113,7 +121,7 @@ export default function AttendancePanel() {
 return (
     <div>
         <Row>
-            <Col>
+            <Col md={3}>
                 <Form.Select 
                     className="mb-3"
                     value={selectedActivity} 
@@ -124,6 +132,14 @@ return (
                         </option>
                     ))}
                 </Form.Select>
+            </Col>
+            <Col>
+                <DatePicker
+                    showIcon
+                    toggleCalendarOnIconClick
+                    selected={selectedDate}
+                    onChange={selectDate}
+                />
             </Col>
             
         </Row>
