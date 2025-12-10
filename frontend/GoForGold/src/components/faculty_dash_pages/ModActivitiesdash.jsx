@@ -12,8 +12,9 @@ export default function ModActivitiesDash() {
     const fetchActivities = async() => {
         const response = await axios.get("http://localhost:3001/facultymoderators/activities", 
             {withCredentials: true});
+        console.log(response.data);
         setActivities(response.data);
-    }
+    };
 
     useEffect(() => {
         fetchActivities();

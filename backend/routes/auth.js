@@ -15,6 +15,7 @@ router.post('/login', async (req,res,next) => {
             where: {email_address},
             include: [{model:User_Role}],
         });
+        
 
         if (!user) {
             return res.status(401).json({error: "User does not exist."});
@@ -34,6 +35,8 @@ router.post('/login', async (req,res,next) => {
             sameSite: "lax",
             maxAge: 24*60*60*1000
         });
+
+        console.log("User_Role at login:", user.User_Role);
 
         return res.json({message: "Login successful!", user:{
             user_id: user.user_id,
