@@ -35,7 +35,7 @@ export default function ProfilePage() {
 
     const [moderatingActivities, setModeratingActivities]=useState([]);
     const fetchModeratingActivities = async(user_id)=> {
-        const response = await axios.get(`http://localhost:3001/facultymoderators/${user_id}`, {
+        const response = await axios.get(`http://localhost:3001/facultymoderators/by-user/${user_id}`, {
             withCredentials: true
         });
         console.log(response.data);

@@ -14,6 +14,7 @@ import ResetPassword from "./pages/ResetPassword.jsx";
 import HonorRoll from "./pages/HonorRoll.jsx";
 import Unauthorized from "./pages/Unauthorized.jsx";
 import Attendance from "./pages/Attendance.jsx";
+import BasePage from "./pages/BasePage.jsx";
 
 
 import ProtectedRoute from "./components/ProtectedRoute";
@@ -23,6 +24,7 @@ const router = createBrowserRouter([
     path: "/",
     element: <App />,
     children: [
+      {path: "", element: <BasePage /> },
       {path: "login", element: <LogIn />},
       {path: "requestreset", element: <SendOTP />},
       {path: "resetpassword", element: <ResetPassword />},

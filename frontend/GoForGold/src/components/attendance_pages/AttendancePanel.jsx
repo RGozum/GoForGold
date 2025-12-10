@@ -20,6 +20,7 @@ export default function AttendancePanel() {
     };
     
 
+
     function formatYYYYMMDD(date) {
         const year = date.getFullYear();
         const month = String(date.getMonth() + 1).padStart(2, "0");
@@ -42,23 +43,23 @@ export default function AttendancePanel() {
         setActivities(response.data);
         if (response.data.length) setSelectedActivity(response.data[0].activity_moderating_id);
         console.log(response.data)
-    };
+    }
 
-    // const fetchAttendance = async() => {
-    //     const response = await axios.get("http://localhost:3001/attendance/attendancedata",
-    //         {params: {startDate: formatYYYYMMDD(sundayDate),
-    //         activity_id: selectedActivity
-    //     }}, {
-    //         withCredentials:true
-    //     });
-    //     setDates(response.data.dates);
-    //     setAttendanceData(response.data.attendanceData);
-    //     console.log(response.data);
-    // };
+    const fetchAttendance = async() => {
+        const response = await axios.get("http://localhost:3001/attendance/attendancedata",
+            {params: {startDate: formatYYYYMMDD(sundayDate),
+            activity_id: selectedActivity
+        }}, {
+            withCredentials:true
+        });
+        setDates(response.data.dates);
+        setAttendanceData(response.data.attendanceData);
+        console.log(response.data);
+    };
     
-    // useEffect(() => {
-    //     fetchActivities();
-    // }, []);
+    useEffect(() => {
+        fetchActivities();
+    }, []);
     
     useEffect(()=> {
         if (selectedActivity) fetchAttendance();

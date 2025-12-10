@@ -4,11 +4,11 @@ const {Faculty_Moderators, Activities, Student_Enrollment, Users} = require('../
 const {isAuthenticated, hasRole} = require('../middleware/authMiddleware');
 const {FACULTY, ADMIN} = require('../config/roles.js');
 
-router.get("/:user_id", isAuthenticated, hasRole(FACULTY, ADMIN), async (req,res)=> {
+router.get("/by-user/:user_id", isAuthenticated, hasRole(FACULTY, ADMIN), async (req,res)=> {
     try {
-        const user_id=Number(req.params.user_id);
+        const faculty_id=Number(req.params.user_id);
 
-        const where = {faculty_id: user_id};
+        const where = {faculty_id};
         const moderating = await Faculty_Moderators.findAll({
             where,
             include: [
@@ -21,7 +21,8 @@ router.get("/:user_id", isAuthenticated, hasRole(FACULTY, ADMIN), async (req,res
         console.error(err);
         res.status(500).json({err: "Failed to retrieve activities."})
     }
-})
+});
+
 
 router.get("/activities", isAuthenticated, hasRole(FACULTY, ADMIN), async(req,res)=> {
     try {
@@ -76,6 +77,6 @@ router.delete("/:faculty_id/:activity_moderating_id/delete-mod", isAuthenticated
         console.error(err);
         res.status(500).json({err: "Failed to delete moderator from activity"});
     }
-})
+});
 
 module.exports = router;

@@ -1,8 +1,17 @@
 const express = require('express');
 const router = express.Router();
-const { Student_Enrollment, Activities, Categories, Honor_List } = require('../models');
+const { Student_Enrollment, Activities, Categories, Honor_List, Faculty_Moderators } = require('../models');
 const { isAuthenticated, hasRole } = require('../middleware/authMiddleware');
 const {FACULTY, ADMIN} = require('../config/roles.js');
+const nodemailer = require('nodemailer');
+
+const transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+        user: process.env.GOOGLE_EMAIL,
+        pass: process.env.GOOGLE_PASSWORD
+    },
+});
 
 
 router.post("/enroll", isAuthenticated, async(req,res) => {
