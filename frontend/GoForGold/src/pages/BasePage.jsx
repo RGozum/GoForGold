@@ -1,6 +1,7 @@
 import {Container, Button} from 'react-bootstrap';
 import React, {useContext} from 'react';
 import {useNavigate} from "react-router-dom";
+import HeaderBar from "../components/landing_page/HeaderBar.jsx"
 
 
 export default function LandingPage() {
@@ -8,6 +9,8 @@ export default function LandingPage() {
     
 
     return (
+        <div>
+        <HeaderBar />
         <Container className="d-flex justify-content-center align-items-center"
         style={{minHeight:'100vh'}}>
             
@@ -22,5 +25,6 @@ export default function LandingPage() {
             </Container>
             
         </Container>
+        </div>
     )
 }
