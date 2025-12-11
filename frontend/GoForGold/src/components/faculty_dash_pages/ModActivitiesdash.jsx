@@ -2,6 +2,7 @@ import {Container, Col, Row, Form, Button, ButtonGroup} from "react-bootstrap"
 import React, {useEffect, useState} from 'react';
 import axios from 'axios';
 import ApprovalPop from './ApprovalPop';
+import EditApprovalPop from './EditApproval';
 import './FacultyDash.css';
 
 export default function ModActivitiesDash() {
@@ -76,12 +77,15 @@ export default function ModActivitiesDash() {
                                     </Col>
                                     <Col xs={3} md={3} className="points-item">
                                     <ButtonGroup className="gap-3 justify-content-center">
-                                        <Button variant="outline-dark" disabled={enroll.approved===null} onClick={()=>addPoints(enroll.student_id, enroll.activities_id, enroll.points)}>^</Button>
+                                        <Button variant="outline-dark" disabled={enroll.approved==!true} onClick={()=>addPoints(enroll.student_id, enroll.activities_id, enroll.points)}>^</Button>
                                         <div>
-                                            {enroll.approved===null ? (<p>Not approved.</p>) : (<p>{enroll.points} points.</p>)}
+                                            {enroll.approved==!true ? (<p>Not approved.</p>) : (<p>{enroll.points} points.</p>)}
                                         </div>
-                                        <Button variant="outline-dark" disabled={enroll.approved===null} onClick={()=>minusPoints(enroll.student_id, enroll.activities_id, enroll.points)}>v</Button>
+                                        <Button variant="outline-dark" disabled={enroll.approved==!true} onClick={()=>minusPoints(enroll.student_id, enroll.activities_id, enroll.points)}>v</Button>
                                     </ButtonGroup>
+                                    </Col>
+                                    <Col xs={2} md={2} >
+                                        <EditApprovalPop student_id={enroll.student_id} activities_id={enroll.activities_id} onUpdate={fetchActivities}/>
                                     </Col>
                                 </Row>
                             </li>

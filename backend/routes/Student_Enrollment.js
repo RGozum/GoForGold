@@ -21,52 +21,54 @@ router.post("/enroll", isAuthenticated, async(req,res) => {
 
     try {
            const newEnrollment = await Student_Enrollment.create({
-        student_id,
-        activities_id,
-        points,
-        approved: null
+            student_id,
+            activities_id,
+            points,
+            approved: null
         });
 
-    const facultyMod = await Faculty_Moderators.findAll({
+        const studentUser = await Users.findOne({
+            where: {
+                user_id: student_id
+            },
+            attribtues: ['first_name', 'last_name']
+        })
+
+        const facultyMod = await Faculty_Moderators.findAll({
         where: {
             activity_moderating_id: activities_id
         },
         include: [{
             model: Users,
             attributes: ['email_address']
+        }, {
+            model: Activities,
+            attributes: ['activity_name']
         }]
     })
 
-    const activity = await Activities.findOne({
-        where: {
-            activity_id: activities_id
-        }
-    })
-
+    if (facultyMod.length>0) {
     for (i=0; i<facultyMod.length; i++) {
-        console.log(facultyMod[i].User.email_address);
         let facultyEmail=facultyMod[i].User.email_address;
 
-        const mailOptions ={
+        const mailOptions = {
             from: process.env.GOOGLE_EMAIL,
             to: facultyEmail,
-            subject: `New Student Enrollment in ${activity.activity_name}`,
+            subject: `New Student Enrollment in ${facultyMod[i].Activity.activity_name}`,
             html: `<h2><span style="color: #ff9900;">Go For Gold!</span></h2>
                     <p>&nbsp;</p>
-                    <p>Hey there. You seem to be trying to reset your password.&nbsp;</p>
-                    <p>Here's the six-digit token to reset your password:</p>
-                    <h1 style="text-align: center;"><span style="color: #3366ff;">${otp}</span></h1>
-                    <p>It expires in ten minutes.</p>
-                    <p>If this was not you,</p>
-                    <p>This email was sent because someone tried resetting your password. Change your password when you log in next in case this was a security issue.</p>
-                    <p>&nbsp;</p>
+                    <p>Hey there.</p>
+                    <p>A new student has enrolled in an activity you moderate.</p>
+                    <h4 style="text-align: center;">Moderated Activity: ${facultyMod[i].Activity.activity_name}</h4>
+                    <h4 style="text-align: center;">Student: ${studentUser.first_name} ${studentUser.last_name}</h4>
+                    <p>&nbsp;<br />Please log in to approve or deny this enrollment request.</p>
                     <p>Have a good day!</p>
                     <p>GoForGold Support</p>`
         }
 
         await transporter.sendMail(mailOptions);
-        return res.json({message: "OTP sent to email."});
-    };
+        };
+    }
 
     await newEnrollment.save();
     res.json(newEnrollment);
@@ -160,6 +162,7 @@ router.put("/:student_id/:activities_id/approve", isAuthenticated, hasRole(ADMIN
         if (!student_enrolled) return res.status(404).json({message:"Not found"});
 
         student_enrolled.approved = approved;
+        student_enrolled.points=0;
         await student_enrolled.save();
 
         res.json({message: `Student ${approved ? "approved" : "denied"} successfully`})
