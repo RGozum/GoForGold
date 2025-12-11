@@ -17,7 +17,7 @@ module.exports = (sequelize, DataTypes) => {
         points: {
             type: DataTypes.INTEGER,
             allowNull: true,
-            defaultValue: true,
+            defaultValue: 0,
         }
     }, {
         freezeTableName: true,

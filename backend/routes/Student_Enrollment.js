@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { Student_Enrollment, Activities, Categories, Honor_List, Faculty_Moderators } = require('../models');
+const { Student_Enrollment, Activities, Categories, Honor_List, Faculty_Moderators, Attendance, Users } = require('../models');
 const { isAuthenticated, hasRole } = require('../middleware/authMiddleware');
 const {FACULTY, ADMIN} = require('../config/roles.js');
 const nodemailer = require('nodemailer');
@@ -15,23 +15,80 @@ const transporter = nodemailer.createTransport({
 
 
 router.post("/enroll", isAuthenticated, async(req,res) => {
-    const student_id = req.user.user_id;
-    const {activities_id} = req.body;
+    const student_id = Number(req.user.user_id);
+    const activities_id = Number(req.body.activities_id);
     const points = 0;
 
-    const newEnrollment = await Student_Enrollment.create({
+    try {
+           const newEnrollment = await Student_Enrollment.create({
         student_id,
         activities_id,
         points,
-});
-await newEnrollment.save();
-res.json(newEnrollment);
+        approved: null
+        });
+
+    const facultyMod = await Faculty_Moderators.findAll({
+        where: {
+            activity_moderating_id: activities_id
+        },
+        include: [{
+            model: Users,
+            attributes: ['email_address']
+        }]
+    })
+
+    const activity = await Activities.findOne({
+        where: {
+            activity_id: activities_id
+        }
+    })
+
+    for (i=0; i<facultyMod.length; i++) {
+        console.log(facultyMod[i].User.email_address);
+        let facultyEmail=facultyMod[i].User.email_address;
+
+        const mailOptions ={
+            from: process.env.GOOGLE_EMAIL,
+            to: facultyEmail,
+            subject: `New Student Enrollment in ${activity.activity_name}`,
+            html: `<h2><span style="color: #ff9900;">Go For Gold!</span></h2>
+                    <p>&nbsp;</p>
+                    <p>Hey there. You seem to be trying to reset your password.&nbsp;</p>
+                    <p>Here's the six-digit token to reset your password:</p>
+                    <h1 style="text-align: center;"><span style="color: #3366ff;">${otp}</span></h1>
+                    <p>It expires in ten minutes.</p>
+                    <p>If this was not you,</p>
+                    <p>This email was sent because someone tried resetting your password. Change your password when you log in next in case this was a security issue.</p>
+                    <p>&nbsp;</p>
+                    <p>Have a good day!</p>
+                    <p>GoForGold Support</p>`
+        }
+
+        await transporter.sendMail(mailOptions);
+        return res.json({message: "OTP sent to email."});
+    };
+
+    await newEnrollment.save();
+    res.json(newEnrollment);
+
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({err: "Failed to enroll student"})
+    }
+ 
 });
 
 router.delete("/:activities_id/delete", isAuthenticated, async(req,res)=> {
     const student_id=req.user.user_id;
     const {activities_id}=req.params;
 try {
+
+    await Attendance.destroy({
+        where: {
+            student_id,
+            activity_id_fk: activities_id
+        }
+    });
     await Student_Enrollment.destroy({
       where: { activities_id, student_id },
     });
