@@ -26,21 +26,19 @@ export default function LandingPage() {
           />
           </video>
 
-          <InfoPages/>
-        <Container className="d-flex justify-content-center align-items-center"
-        style={{minHeight:'100vh'}}>
-            
-            <Container className="p-5 border text-center">
 
-            <h3 className="mb-4">GoForGold</h3>
-            <hr className="mb-5"></hr>
-            <p>Welcome to SJVHS' Gold and White Award Tracker!</p>
-            <br></br>
-            <p>Feel free to log in!</p>
-            <Button size="lg" variant="dark" onClick={(e)=>navigate("/login")}>Login page</Button>
-            </Container>
             
-        </Container>
+            <div className="p-5 border text-center mb-5">
+
+              <h3>Welcome to SJVHS' Gold and White Award Tracker!</h3>
+              <br />
+              <p>Created so poeple can track their activities and determine if they have received the award!</p>
+              <hr></hr>
+              <Button size="lg" variant="dark" onClick={(e)=>navigate("/login")}>Log into Account</Button>
+
+            
+        </div>
+          <InfoPages />
         <Footer />
         </div>
     )

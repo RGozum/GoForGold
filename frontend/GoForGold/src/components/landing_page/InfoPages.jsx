@@ -1,10 +1,14 @@
-import {Container, Col, Card, Row, Table} from 'react-bootstrap';
+import {Container, Col, Card, Row, Image} from 'react-bootstrap';
+import Lance from '../../assets/SJV_Lance_PMS2.svg';
+import Shield from '../../assets/Gold Shield Outlined.svg';
 import './LandingPage.css';
 
 export default function LandingPage() {
   return (
     <>
-    <Row className="mt-3">
+    <section id="info">
+        <span />
+    <Row className="mt-3 mb-4">
         <Col>
             <Card>
             <Card.Body>
@@ -20,14 +24,16 @@ export default function LandingPage() {
             </Card.Body>
             </Card>
         </Col>
-        <Col>
-            
+        <Col className="text-center">
+            <Image src={Shield} className="w-50" fluid />
         </Col>
     </Row>
+    </section>
 
+    <section id="requirements">
     <Row className="mt-3 p-3">
-        <Col>
-            
+        <Col className="d-flex justify-content-center align-items-center">
+            <Image src={Lance} fluid/>
         </Col>
         <Col>
             <Card>
@@ -104,7 +110,7 @@ export default function LandingPage() {
             </Card>
         </Col>
     </Row>
-    
+    </section>
     
     </>
   );
