@@ -8,6 +8,7 @@ import BackArrow from '../../assets/backarrow.svg';
 import './SearchBase.css';
 import ArchivePop from './ArchivePop.jsx';
 import UpdatePermissionsPop from './UpdatePermissionsPop.jsx';
+import EditEmailAddressPop from './EditEmailAddressPop.jsx';
 
 import FacultyModPop from './FacultyModPop.jsx';
 import AddModeratorPop from './AddModerator.jsx';
@@ -60,10 +61,27 @@ export default function ProfilePage() {
             </Link>
             <div className="panel mb-3">
                 <h3 className="mb-3">User {user_id}</h3>
-                <p>{user.first_name} {user.last_name}</p>
-                <p>Account Role: {user.User_Role?.user_role}</p>
-                <p>Email Address: {user.email_address}</p>
-                <p>Active: {user.active ? "Active" : "Inactive"} </p>
+
+                <Row>
+                    <p>{user.first_name} {user.last_name}</p>
+
+                </Row>
+                <Row>
+                    <p>Account Role: {user.User_Role?.user_role}</p>
+
+                </Row>
+                <Row>
+                    <Col md={4}>
+                        <p>Email Address: {user.email_address}</p>
+                    </Col>
+                    <Col>
+                        <EditEmailAddressPop user_id={user_id} fetchUsers={fetchUsers}/>
+                    </Col>
+
+                </Row>
+                <Row>
+                    <p>Active: {user.active ? "Active" : "Inactive"} </p>
+                </Row>
                 <span>
                     
                 </span>

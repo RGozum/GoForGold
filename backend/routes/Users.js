@@ -150,4 +150,46 @@ router.get("/:user_id", isAuthenticated, hasRole(ADMIN), async(req,res)=> {
   res.json(user);
 });
 
+
+router.put("/changeemail/:user_id", isAuthenticated, async(req, res) => {
+    try {
+        const {newEmailAddress} = req.body;
+        const user_id = req.params.user_id;
+
+
+
+        const existingUser = await Users.findOne({
+          where: {
+            email_address: newEmailAddress
+          }
+        });
+
+
+        if (existingUser && existingUser.user_id !== user_id){
+          return res.status(400).json({message:"This email is already in use."});
+        }
+
+        const user = await Users.findOne({
+          where: {
+            user_id
+          },
+          attributes: {exclude: ['password']}
+        });
+
+        if (user.user_id ===1 && req.user?.user_id!==1) return res.status(401).json({message: "You cannot update this account."});
+
+        if (!user) return res.status(404).json({ message: "Not found" });
+
+        user.email_address=newEmailAddress;
+        console.log(user.email_address);
+
+        await user.save();
+        return res.json(user);
+
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({message: "Server failed while changing email."});
+    }
+});
+
 module.exports = router;
