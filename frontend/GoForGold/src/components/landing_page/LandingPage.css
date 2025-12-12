@@ -1,0 +1,31 @@
+.header-overlay {
+position: sticky !important;
+  top: 0;
+  width: 100%;
+  z-index: 1000;
+  backdrop-filter: blur(3px);
+  padding: 2rem 1rem;
+}
+
+.landing-video {
+  margin-top: -109px; /* adjust to match the header height */
+}
+
+
+.footer {
+    displaY: flex;
+    justify-content: space-between;
+    background-color: rgb(216, 203, 189);
+    color:rgb(35, 37, 37);
+    padding: 10px;
+    align-content: center;
+    font-size: small;
+}
+
+.footer-column {
+    flex: 1;
+}
+
+.footer-column-attributions {
+    margin: 0;
+}

@@ -1,16 +1,16 @@
 import Container from 'react-bootstrap/Container';
 import Navbar from 'react-bootstrap/Navbar';
 
-function BrandExample() {
+function Header() {
   return (
     <>
-      <Navbar sticky="top">
+      <Navbar className="header-overlay" expand="lg" sticky="top">
         <Container>
-          <Navbar.Brand href="/">Go For Gold</Navbar.Brand>
+          <Navbar.Brand href="/"><h3>Go For Gold</h3></Navbar.Brand>
         </Container>
       </Navbar>
     </>
   );
 }
 
-export default BrandExample;
+export default Header;

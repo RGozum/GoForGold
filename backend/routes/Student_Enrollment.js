@@ -136,11 +136,13 @@ router.get("/points", isAuthenticated, async(req,res)=> {
             },
         });
 
-        const honorPoints= await Honor_List.sum("points", {
+        let honorPoints= await Honor_List.sum("points", {
             where: {
                 student_id
             },
         })
+
+        if (honorPoints > 12) { honorPoints=12 }
         const totalPoints=points+honorPoints;
         res.json({points: totalPoints || 0});
     } catch (err) {

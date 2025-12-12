@@ -1,6 +1,6 @@
 import React, {useState, useEffect, useContext} from 'react';
 import {useNavigate, Link} from "react-router-dom";
-import {Container, Form, InputGroup, Button, Row, Col} from 'react-bootstrap';
+import {Container, Form, InputGroup, Button, Row, Col, Navbar} from 'react-bootstrap';
 import axios from "axios";
 import { AuthContext } from '../AuthContext';
 
@@ -57,7 +57,14 @@ export default function LogIn() {
     }
     return (
         <div>
-            <h3>Go for Gold!</h3>
+            <Navbar>
+                <Navbar.Brand href="/" className="ms-3 p-2">
+                 <h3>
+                    Go for Gold!
+                </h3>
+            </Navbar.Brand>
+            </Navbar>
+           
         <Container className="d-flex justify-content-center align-items-center"
         style={{minHeight:'100vh'}}>
             
