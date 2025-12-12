@@ -1,14 +1,15 @@
-import React, {useContext} from 'react';
-import {Navbar, Nav, Container, NavDropdown, Button, Image} from 'react-bootstrap';
+import React, {useContext, useState} from 'react';
+import {Navbar, Nav, Container, NavDropdown, Button, Modal, Form} from 'react-bootstrap';
 import ProfilePictureIcon from '../../assets/profilepictureicon.svg';
 import LogOutIcon from '../../assets/logoutpic.svg';
 import { AuthContext } from '../../AuthContext';
 import { useNavigate } from 'react-router';
+import ResetPasswordPop from './ResetPasswordPop';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 
-export default function AdminHeader () {
+export default function FacultyHeader () {
     const {user, logout} = useContext(AuthContext);
     const navigate = useNavigate();
 
@@ -16,8 +17,10 @@ export default function AdminHeader () {
         e.preventDefault();
         await logout();
         navigate("/login");
-    }
+    };
+
     return (
+         <>
         <Navbar expand="lg">
             <Container fluid>
                 <Navbar.Brand href="/">Go For Gold!</Navbar.Brand>
@@ -38,10 +41,13 @@ export default function AdminHeader () {
                             </div>
                         } id="profile-dropdown" align="end">
 
+                            <ResetPasswordPop />
+                            <hr className="me-3 ms-3"></hr>
                             <NavDropdown.Item onClick={onLogout} className="logout-drop">
                                 <img src={LogOutIcon} className="logout"/><div className="gap"/>
                                 Logout
-                                </NavDropdown.Item>
+                            </NavDropdown.Item>
+                            
                         </NavDropdown>
 
 
@@ -51,5 +57,7 @@ export default function AdminHeader () {
             </Container>
 
         </Navbar>
+        </>
+ 
     )
 }

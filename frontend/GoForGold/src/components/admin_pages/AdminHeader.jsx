@@ -6,6 +6,8 @@ import LogOutIcon from '../../assets/logoutpic.svg';
 import { AuthContext } from '../../AuthContext';
 import { useNavigate } from 'react-router';
 
+import ResetPasswordPop from '../faculty_dash_pages/ResetPasswordPop';
+
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './AdminHeader.css'
 
@@ -45,6 +47,8 @@ export default function AdminHeader () {
                             </div>
                         } id="profile-dropdown" align="end">
 
+                            <ResetPasswordPop />
+                            <hr className="me-3 ms-3"></hr>
                             <NavDropdown.Item onClick={onLogout} className="logout-drop">
                                 <img src={LogOutIcon} className="logout"/><div className="gap"/>
                                 Logout

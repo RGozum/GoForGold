@@ -53,7 +53,7 @@ export default function ResetPassword() {
         const data = {email_address, token: code, newpassword: password};
 
         try {
-            const response = await axios.post('http://localhost:3001/auth/resetpassword', data);
+            await axios.post('http://localhost:3001/auth/resetpassword', data);
 
             alert("Password successfully reset! Redirecting you...");
             setTimeout(()=>navigate("/login"), 2000);

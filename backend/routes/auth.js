@@ -5,6 +5,7 @@ const bcrypt = require('bcrypt');
 
 const {createToken, verifyToken} = require('../utils/jwt');
 const passport = require('passport');
+const {isAuthenticated} = require ('../middleware/authMiddleware');
 
 const nodemailer = require('nodemailer');
 
@@ -216,6 +217,44 @@ router.post('/resetpassword', async(req,res)=> {
     }
 
 
+});
+
+router.post("/verifypassword", isAuthenticated, async(req, res) => {
+    const {currentPassword} = req.body;
+
+    const user_id = req.user.user_id;
+
+    const user = await Users.findByPk(user_id);
+
+    if (!user) {
+    return res.status(404).json({ error: "User not found" });
+    }
+
+
+    const match = await bcrypt.compare(currentPassword, user.password);
+    if (!match) return res.status(401).json({error:"Invalid email or password."});
+
+    res.json({message: "Password is correct!"});
+
+});
+
+router.post("/changepassword", isAuthenticated, async(req, res) => {
+    
+    const {newPassword} = req.body;
+    const user_id = req.user.user_id;
+
+    try {
+    const user =  await Users.findByPk(user_id);
+
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+    user.password = hashedPassword;
+
+    await user.save();
+    return res.json({message: "Password updated successfully."});
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({message: "Server failed while updating password."})
+    }
 })
 
 module.exports = router;

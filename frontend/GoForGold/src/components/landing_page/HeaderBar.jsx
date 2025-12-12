@@ -4,9 +4,9 @@ import Navbar from 'react-bootstrap/Navbar';
 function BrandExample() {
   return (
     <>
-      <Navbar>
+      <Navbar sticky="top">
         <Container>
-          <Navbar.Brand href="#home">Brand link</Navbar.Brand>
+          <Navbar.Brand href="/">Go For Gold</Navbar.Brand>
         </Container>
       </Navbar>
     </>
