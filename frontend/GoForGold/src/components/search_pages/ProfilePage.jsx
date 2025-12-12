@@ -9,6 +9,7 @@ import './SearchBase.css';
 import ArchivePop from './ArchivePop.jsx';
 import UpdatePermissionsPop from './UpdatePermissionsPop.jsx';
 import EditEmailAddressPop from './EditEmailAddressPop.jsx';
+import ChangePasswordPop from './ChangePassword.jsx';
 
 import FacultyModPop from './FacultyModPop.jsx';
 import AddModeratorPop from './AddModerator.jsx';
@@ -86,11 +87,14 @@ export default function ProfilePage() {
                     
                 </span>
                 <Row className="d-flex">
-                    <Col xs={2}>
+                    <Col xs={1}>
                         <ArchivePop user_id={user_id} fetchUsers={fetchUsers} />
                     </Col>
-                    <Col>
+                    <Col xs={1}>
                         <UpdatePermissionsPop user_id={user_id} fetchUsers={fetchUsers}/>
+                    </Col>
+                    <Col>
+                        <ChangePasswordPop user_id={user_id} fetchUsers={fetchUsers} />
                     </Col>
                 </Row>
             </div>

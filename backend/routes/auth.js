@@ -239,7 +239,6 @@ router.post("/verifypassword", isAuthenticated, async(req, res) => {
 });
 
 router.post("/changepassword", isAuthenticated, async(req, res) => {
-    
     const {newPassword} = req.body;
     const user_id = req.user.user_id;
 
@@ -254,6 +253,27 @@ router.post("/changepassword", isAuthenticated, async(req, res) => {
     } catch (err) {
         console.error(err);
         res.status(500).json({message: "Server failed while updating password."})
+    }
+});
+
+router.put("/defaultpasswordreset", isAuthenticated, async(req,res)=> {
+    const {user_id}=req.body;
+    try {
+        const user = await Users.findByPk(user_id);
+
+        if (!user) return res.status(404).json({ message: "Not found" });
+        if (user.user_id ===1 && req.user?.user_id!==1) return res.status(401).json({message: "You cannot update this account."});
+
+
+        const defaultPassword= "Vianney!";
+        const hashedPassword = await bcrypt.hash(defaultPassword, 10);
+
+        user.password = hashedPassword;
+        await user.save();
+        return res.json(user);
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({message: "Server failed while updating password"});
     }
 });
 
