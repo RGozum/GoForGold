@@ -78,9 +78,17 @@ router.post("/bulk",isAuthenticated, hasRole(ADMIN), async(req,res) => {
       return res.status(400).json({message: "No users provided."});
     }
 
+  const currentUsers = await Users.findAll();
+
     for (const u of users) {
       if (!u.first_name || !u.last_name || !u.email_address || !u.user_role_id) {
         return res.status(400).json({message: "Each user must include first name, last name, email, and role."});
+      } else {
+        for (const c of currentUsers) {
+          if (u.email_address === c.email_address) {
+            return res.status(400).json({message: "This user already exists in the server."})
+          }
+        }
       }
     }
 
