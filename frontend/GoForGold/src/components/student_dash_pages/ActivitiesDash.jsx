@@ -81,7 +81,7 @@ export default function ActivitiesDash() {
                             <Row className="act-cat">
                                 <Col xs={2} md={2} className="category-item">{act.Activity.Category.category_name}</Col>
                                 <Col xs={2} md={2} className="activity-item">{act.Activity.activity_name}</Col>
-                                <Col xs={2} md={2}  className="points-item">{act.approved===null ? (<p>Not approved.</p>) : (act.points + " points")}</Col>
+                                <Col xs={2} md={2}  className="points-item">{act.approved===null || act.approved === false ? (<p>Not approved.</p>) : (act.points + " points")}</Col>
                                 <Col xs={2} md={4}><RemoveActivityPop 
                                    activities_id={act.activities_id} handleDelete={onDelete} /> </Col>
                             </Row>
