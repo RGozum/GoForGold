@@ -1,0 +1,63 @@
+/*
+-- Query: SELECT * FROM goforgolddb.attendance
+LIMIT 0, 1000
+
+-- Date: 2025-12-15 20:21
+*/
+INSERT INTO `attendance` (`attendance_date`,`activity_id_fk`,`student_id`) VALUES ('2025-11-17',87,8);
+INSERT INTO `attendance` (`attendance_date`,`activity_id_fk`,`student_id`) VALUES ('2025-11-18',87,8);
+INSERT INTO `attendance` (`attendance_date`,`activity_id_fk`,`student_id`) VALUES ('2025-11-19',87,8);
+INSERT INTO `attendance` (`attendance_date`,`activity_id_fk`,`student_id`) VALUES ('2025-11-20',87,8);
+INSERT INTO `attendance` (`attendance_date`,`activity_id_fk`,`student_id`) VALUES ('2025-11-21',87,8);
+INSERT INTO `attendance` (`attendance_date`,`activity_id_fk`,`student_id`) VALUES ('2025-11-23',87,8);
+INSERT INTO `attendance` (`attendance_date`,`activity_id_fk`,`student_id`) VALUES ('2025-11-24',87,8);
+INSERT INTO `attendance` (`attendance_date`,`activity_id_fk`,`student_id`) VALUES ('2025-11-25',87,8);
+INSERT INTO `attendance` (`attendance_date`,`activity_id_fk`,`student_id`) VALUES ('2025-11-17',87,11);
+INSERT INTO `attendance` (`attendance_date`,`activity_id_fk`,`student_id`) VALUES ('2025-11-18',87,11);
+INSERT INTO `attendance` (`attendance_date`,`activity_id_fk`,`student_id`) VALUES ('2025-11-19',87,11);
+INSERT INTO `attendance` (`attendance_date`,`activity_id_fk`,`student_id`) VALUES ('2025-11-20',87,11);
+INSERT INTO `attendance` (`attendance_date`,`activity_id_fk`,`student_id`) VALUES ('2025-11-21',87,11);
+INSERT INTO `attendance` (`attendance_date`,`activity_id_fk`,`student_id`) VALUES ('2025-11-23',87,11);
+INSERT INTO `attendance` (`attendance_date`,`activity_id_fk`,`student_id`) VALUES ('2025-11-24',87,11);
+INSERT INTO `attendance` (`attendance_date`,`activity_id_fk`,`student_id`) VALUES ('2025-11-25',87,11);
+INSERT INTO `attendance` (`attendance_date`,`activity_id_fk`,`student_id`) VALUES ('2025-12-08',101,11);
+INSERT INTO `attendance` (`attendance_date`,`activity_id_fk`,`student_id`) VALUES ('2025-12-09',101,11);
+INSERT INTO `attendance` (`attendance_date`,`activity_id_fk`,`student_id`) VALUES ('2025-12-10',101,11);
+INSERT INTO `attendance` (`attendance_date`,`activity_id_fk`,`student_id`) VALUES ('2025-12-11',101,11);
+INSERT INTO `attendance` (`attendance_date`,`activity_id_fk`,`student_id`) VALUES ('2025-12-12',101,11);
+INSERT INTO `attendance` (`attendance_date`,`activity_id_fk`,`student_id`) VALUES ('2025-12-15',101,11);
+INSERT INTO `attendance` (`attendance_date`,`activity_id_fk`,`student_id`) VALUES ('2025-12-16',101,11);
+INSERT INTO `attendance` (`attendance_date`,`activity_id_fk`,`student_id`) VALUES ('2025-12-17',101,11);
+INSERT INTO `attendance` (`attendance_date`,`activity_id_fk`,`student_id`) VALUES ('2025-11-17',87,15);
+INSERT INTO `attendance` (`attendance_date`,`activity_id_fk`,`student_id`) VALUES ('2025-11-18',87,15);
+INSERT INTO `attendance` (`attendance_date`,`activity_id_fk`,`student_id`) VALUES ('2025-11-19',87,15);
+INSERT INTO `attendance` (`attendance_date`,`activity_id_fk`,`student_id`) VALUES ('2025-11-20',87,15);
+INSERT INTO `attendance` (`attendance_date`,`activity_id_fk`,`student_id`) VALUES ('2025-11-21',87,15);
+INSERT INTO `attendance` (`attendance_date`,`activity_id_fk`,`student_id`) VALUES ('2025-11-23',87,15);
+INSERT INTO `attendance` (`attendance_date`,`activity_id_fk`,`student_id`) VALUES ('2025-11-24',87,15);
+INSERT INTO `attendance` (`attendance_date`,`activity_id_fk`,`student_id`) VALUES ('2025-11-25',87,15);
+INSERT INTO `attendance` (`attendance_date`,`activity_id_fk`,`student_id`) VALUES ('2025-11-17',87,16);
+INSERT INTO `attendance` (`attendance_date`,`activity_id_fk`,`student_id`) VALUES ('2025-11-18',87,16);
+INSERT INTO `attendance` (`attendance_date`,`activity_id_fk`,`student_id`) VALUES ('2025-11-19',87,16);
+INSERT INTO `attendance` (`attendance_date`,`activity_id_fk`,`student_id`) VALUES ('2025-11-20',87,16);
+INSERT INTO `attendance` (`attendance_date`,`activity_id_fk`,`student_id`) VALUES ('2025-11-21',87,16);
+INSERT INTO `attendance` (`attendance_date`,`activity_id_fk`,`student_id`) VALUES ('2025-11-23',87,16);
+INSERT INTO `attendance` (`attendance_date`,`activity_id_fk`,`student_id`) VALUES ('2025-11-24',87,16);
+INSERT INTO `attendance` (`attendance_date`,`activity_id_fk`,`student_id`) VALUES ('2025-11-25',87,16);
+INSERT INTO `attendance` (`attendance_date`,`activity_id_fk`,`student_id`) VALUES ('2025-11-17',87,18);
+INSERT INTO `attendance` (`attendance_date`,`activity_id_fk`,`student_id`) VALUES ('2025-11-18',87,18);
+INSERT INTO `attendance` (`attendance_date`,`activity_id_fk`,`student_id`) VALUES ('2025-11-19',87,18);
+INSERT INTO `attendance` (`attendance_date`,`activity_id_fk`,`student_id`) VALUES ('2025-11-20',87,18);
+INSERT INTO `attendance` (`attendance_date`,`activity_id_fk`,`student_id`) VALUES ('2025-11-21',87,18);
+INSERT INTO `attendance` (`attendance_date`,`activity_id_fk`,`student_id`) VALUES ('2025-11-23',87,18);
+INSERT INTO `attendance` (`attendance_date`,`activity_id_fk`,`student_id`) VALUES ('2025-11-24',87,18);
+INSERT INTO `attendance` (`attendance_date`,`activity_id_fk`,`student_id`) VALUES ('2025-11-25',87,18);
+INSERT INTO `attendance` (`attendance_date`,`activity_id_fk`,`student_id`) VALUES ('2025-12-10',60,19);
+INSERT INTO `attendance` (`attendance_date`,`activity_id_fk`,`student_id`) VALUES ('2025-12-11',60,19);
+INSERT INTO `attendance` (`attendance_date`,`activity_id_fk`,`student_id`) VALUES ('2025-11-25',60,21);
+INSERT INTO `attendance` (`attendance_date`,`activity_id_fk`,`student_id`) VALUES ('2025-12-02',60,21);
+INSERT INTO `attendance` (`attendance_date`,`activity_id_fk`,`student_id`) VALUES ('2025-12-03',60,21);
+INSERT INTO `attendance` (`attendance_date`,`activity_id_fk`,`student_id`) VALUES ('2025-12-04',60,21);
+INSERT INTO `attendance` (`attendance_date`,`activity_id_fk`,`student_id`) VALUES ('2025-12-09',60,21);
+INSERT INTO `attendance` (`attendance_date`,`activity_id_fk`,`student_id`) VALUES ('2025-12-10',60,21);
+INSERT INTO `attendance` (`attendance_date`,`activity_id_fk`,`student_id`) VALUES ('2025-12-11',60,21);
