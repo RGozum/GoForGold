@@ -85,12 +85,20 @@ router.delete("/:activities_id/delete", isAuthenticated, async(req,res)=> {
     const {activities_id}=req.params;
 try {
 
+    const attendanceRecord = await Attendance.findOne({
+        where: {
+            student_id,
+            activity_id_fk: activity_id_fk
+        }
+    });
+    if (attendanceRecord) {
     await Attendance.destroy({
         where: {
             student_id,
             activity_id_fk: activities_id
         }
     });
+    }; 
     await Student_Enrollment.destroy({
       where: { activities_id, student_id },
     });
