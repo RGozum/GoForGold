@@ -88,7 +88,7 @@ try {
     const attendanceRecord = await Attendance.findOne({
         where: {
             student_id,
-            activity_id_fk: activity_id_fk
+            activity_id_fk: activities_id
         }
     });
     if (attendanceRecord) {
