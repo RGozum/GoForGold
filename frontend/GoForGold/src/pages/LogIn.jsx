@@ -108,7 +108,6 @@ export default function LogIn() {
             <Row>
                 <Col>
                      <Link to="/requestreset">Forgot Password?</Link>
-
                 </Col>
             </Row>
 
