@@ -18,11 +18,7 @@ module.exports = (sequelize, DataTypes) => {
             allowNull: false,
             defaultValue: true,
         },
-        year_id: {
-            type: DataTypes.INTEGER,
-            allowNull: false,
-            defaultValue: 1, // will change to later on
-        }, 
+        
     }, {
         freezeTableName: true,
         timestamps: false
