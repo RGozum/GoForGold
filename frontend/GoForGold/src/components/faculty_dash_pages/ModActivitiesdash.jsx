@@ -69,13 +69,13 @@ export default function ModActivitiesDash() {
                             <li key={enroll.student_id} >
                                 <Row className="align-items-center text-center">
                                     <Col xs={3} md={3} className="text-center name-item">{enroll.User.first_name} {enroll.User.last_name}</Col>
-                                    <Col xs={3} md={3}>{enroll.approved===null ? (
+                                    <Col xs={5} md={3}>{enroll.approved===null ? (
                                         <ApprovalPop student_id={enroll.student_id} activities_id={enroll.activities_id} onUpdate={fetchActivities}/>) : 
                                         enroll.approved === true ? (
                                         <div className="name-item">Approved</div>) : (
                                         <div className="name-item">Denied</div>)}
                                     </Col>
-                                    <Col xs={3} md={3} className="points-item">
+                                    <Col xs={5} md={3} className="points-item">
                                     <ButtonGroup className="gap-3 justify-content-center">
                                         <Button variant="outline-dark" disabled={enroll.approved===false || enroll.approved===null} onClick={()=>addPoints(enroll.student_id, enroll.activities_id, enroll.points)}>^</Button>
                                         <div>

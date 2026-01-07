@@ -72,12 +72,6 @@ const defineAssociations = (db) => {
         foreignKey: 'category_id',
     });
 
-    //Activities have one year, School years have many activities
-    Activities.belongsTo(School_Years, { foreignKey: 'year_id' });
-    School_Years.hasMany(Activities, {
-        foreignKey: 'year_id',
-    });
-
     //Users can have many honor rolls, Honor rolls go to many students
     Users.belongsToMany(Honor_Roll, {
         through: Honor_List,

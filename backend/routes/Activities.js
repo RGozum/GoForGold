@@ -1,19 +1,26 @@
 const express = require('express');
 const router = express.Router();
 const { Activities} = require('../models');
-
-
 const {ADMIN} = require ('../config/roles');
 const { isAuthenticated, hasRole } = require('../middleware/authMiddleware');
 
 router.get("/", async(req, res) => {
+  try {
     const {category_id} = req.query;
+
+    console.log(category_id);
 
     const where = {};
     if (category_id) where.category_id=Number(category_id);
+    console.log(where);
 
     const listOfActivities = await Activities.findAll({where});
     res.json(listOfActivities);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({err: "Failed to retrieve activities."});
+  }
+    
 });
 
 router.get("/:category_id/active", async(req,res) => {

@@ -90,7 +90,7 @@ router.post("/bulk",isAuthenticated, hasRole(ADMIN), async(req,res) => {
           }
         }
       }
-    }
+    };
 
     const defaultPassword= "Vianney!";
     const hashedPassword = await bcrypt.hash(defaultPassword, 10);
