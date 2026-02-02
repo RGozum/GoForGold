@@ -17,6 +17,11 @@ module.exports = (sequelize, DataTypes) => {
         end_date: {
             type: DataTypes.DATEONLY,
             allowNull: true,
+        },
+        active: {
+            type: DataTypes.BOOLEAN,
+            allowNull: false,
+            defaultValue: true,
         }
     }, {
         freezeTableName: true,

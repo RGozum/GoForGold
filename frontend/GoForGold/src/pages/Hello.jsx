@@ -8,6 +8,7 @@ import './Hello.css';
 import AdminScrollablePanel from "../components/admin_pages/AdminScrollablePanel.jsx";
 import ActivityPanel from "../components/admin_pages/ActivityPanel.jsx";
 import UsersComponent from '../components/admin_pages/UsersComponent.jsx';
+import YearsPanel from '../components/admin_pages/YearsPanel.jsx';
 
 export default function Hello() {
 const [categories, setCategories] = useState([]);
@@ -73,11 +74,11 @@ const addCategory = async (name) => {
             />
           </Col>
         </Row>
-        <Row><UsersComponent className="mb-3"/>
+        <Row className="mb-5"><UsersComponent className="mb-3"/>
         </Row>
 
         <Row>
-          
+          <YearsPanel className="mb-3"/>
         </Row>
 
 

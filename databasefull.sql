@@ -98,6 +98,7 @@ CREATE TABLE IF NOT EXISTS `goforgolddb`.`school_years` (
   `name` VARCHAR(50) NOT NULL,
   `start_date` DATE NULL,
   `end_date` DATE NULL,
+  `active` TINYINT NOT NULL,
   PRIMARY KEY (`year_id`))
 ENGINE = InnoDB
 AUTO_INCREMENT = 2

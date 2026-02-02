@@ -56,6 +56,9 @@ app.use('/studentgrades',studentGradesRoutes);
 const attendanceRoutes = require('./routes/Attendance');
 app.use('/attendance', attendanceRoutes);
 
+const yearRoutes = require('./routes/School_Years');
+app.use('/schoolyears', yearRoutes);
+
 sequelize.authenticate().then(() => {
    console.log('Connection has been established successfully.');
 }).catch((error) => {
