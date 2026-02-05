@@ -18,8 +18,6 @@ export default function AttendancePanel() {
         sunday.setDate(date.getDate() - date.getDay());
         setSundayDate(sunday);
     };
-    
-
 
     function formatYYYYMMDD(date) {
         const year = date.getFullYear();
