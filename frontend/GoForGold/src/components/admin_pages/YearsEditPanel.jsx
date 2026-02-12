@@ -35,7 +35,7 @@ export default function YearsEditPanel({year_id, refreshYears}) {
     const fetchYear = async(year_id) => {
         try {
             const response = await axios.get(`http://localhost:3001/schoolyears/${year_id}`, {withCredentials: true});
-            console.log(response.data);
+            // console.log(response.data);
             setStartDate(response.data.start_date);
             selectEndDate(response.data.end_date);
         } catch(err) {

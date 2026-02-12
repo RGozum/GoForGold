@@ -10,7 +10,7 @@ export default function YearsPanel() {
     const [years, setYears]=useState([]);
 
     const fetchYears = async() => {
-        const response = await axios.get('http://localhost:3001/schoolyears');
+        const response = await axios.get('http://localhost:3001/schoolyears', {withCredentials: true});
         setYears(response.data);
     };
 
