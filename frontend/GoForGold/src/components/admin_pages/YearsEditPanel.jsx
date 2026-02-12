@@ -6,7 +6,7 @@ import DatePicker from "react-datepicker";
 
 import './AddCategoryPop.css';
 
-export default function YearsEditPanel({year_id}) {
+export default function YearsEditPanel({year_id, refreshYears}) {
     const [show, setShow] = useState(false);
     const [selectedStartDate, setStartDate] = useState([]);
     const [selectedEndDate, setEndDate] = useState([]);
@@ -20,9 +20,9 @@ export default function YearsEditPanel({year_id}) {
         e.preventDefault();
         await axios.put(`http://localhost:3001/schoolyears/${year_id}/editdates`, 
             {start_date: selectedStartDate, 
-        end_date: selectedEndDate});
+        end_date: selectedEndDate}, {withCredentials: true});
         handleClose();
-    }
+    };
 
     const selectStartDate = (date) => {
         setStartDate(date);
@@ -30,14 +30,20 @@ export default function YearsEditPanel({year_id}) {
 
     const selectEndDate = (date) => {
         setEndDate(date);
-    }
+    };
 
     const fetchYear = async(year_id) => {
-        const response = await axios.get(`http://localhost:3001/schoolyears/${year_id}`, {withCredentials: true});
-        console.log(response.data);
-        setStartDate(response.data.start_date);
-        selectEndDate(response.data.end_date);
-    }
+        try {
+            const response = await axios.get(`http://localhost:3001/schoolyears/${year_id}`, {withCredentials: true});
+            console.log(response.data);
+            setStartDate(response.data.start_date);
+            selectEndDate(response.data.end_date);
+        } catch(err) {
+            alert(err.response.data.message);
+            handleClose();
+        }
+        
+    };
     
     useEffect(() => {
         fetchYear(year_id);

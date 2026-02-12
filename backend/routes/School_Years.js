@@ -3,6 +3,7 @@ const router = express.Router();
 const {School_Years} = require('../models');
 const {ADMIN} = require ('../config/roles');
 const { isAuthenticated, hasRole } = require('../middleware/authMiddleware');
+const { act } = require('react');
 
 router.get("/", async(req,res)=> {
     const listOfYears= await School_Years.findAll();
@@ -17,8 +18,8 @@ router.get("/:year_id", async(req,res)=> {
     res.json(year);
 });
 
-router.put("/:year_id/editdates", async(req,res) => {
-    const year_id = req.params;
+router.put("/:year_id/editdates", isAuthenticated, hasRole(ADMIN), async(req,res) => {
+    const { year_id } = req.params;
     const {start_date, end_date} = req.body;
     const year = await School_Years.findOne({where: year_id});
     if (!year) return res.status(404).json("Year not found");
@@ -26,6 +27,45 @@ router.put("/:year_id/editdates", async(req,res) => {
     year.end_date = end_date;
     await year.save();
     res.json(year);
+});
+
+router.put("/:year_id/archive", isAuthenticated, hasRole(ADMIN), async(req,res)=> {
+    const { year_id } = req.params;
+    try {
+        const activeYear = await School_Years.findOne(
+            {where: {
+                year_id, 
+                active: 1,
+            },
+        });
+        if (activeYear) {
+            activeYear.active = !activeYear.active;
+            await activeYear.save(); 
+        }
+        res.json(activeYear);
+    } catch (err) {
+        console.error("Error updating year: "+ err);
+        res.status(500).json({err: "Failed to update year"});
+    } 
+});
+
+router.put("/:year_id/active", isAuthenticated, hasRole(ADMIN), async(req,res)=> {
+    const { year_id } = req.params;
+    try {
+        const activeYear = await School_Years.findOne({where: {active: true}});
+        if (activeYear) {
+            activeYear.active = !activeYear.active;
+            await activeYear.save();
+        }
+        const year = await School_Years.findOne({where: {year_id}});
+        if (!year) return res.status(404).json("Year not found");
+        year.active = !year.active;
+        await year.save();
+        res.json(year);
+    } catch (err) {
+        console.error("Error updating year: "+ err);
+        res.status(500).json({err: "Failed to update year"});
+    };
 })
 
 module.exports = router;
