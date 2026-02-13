@@ -21,7 +21,7 @@ export default function YearsPanel() {
     return (
         <div className="scrollable-panel-long">
             <h2 className='title'>Years</h2>
-            <AddYearPop />
+            <AddYearPop refreshYears={fetchYears} />
             <ul className="ul-style">
                 {years.map((year)=> (
                     <li key={year.year_id} className={`${year.active ? "year-item-active" : "year-item-inactive"}`}>

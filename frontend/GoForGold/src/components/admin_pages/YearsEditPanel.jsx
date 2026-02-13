@@ -18,6 +18,16 @@ export default function YearsEditPanel({year_id, refreshYears}) {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        console.log(selectedEndDate);
+        console.log(selectedStartDate);
+        if (selectedEndDate<selectedStartDate) {
+            alert("Your end date occurs before your start date!");
+            return;
+        }
+        if (selectedEndDate==selectedStartDate) {
+            alert("Your end date and start date are the same!");
+            return;
+        }
         await axios.put(`http://localhost:3001/schoolyears/${year_id}/editdates`, 
             {start_date: selectedStartDate, 
         end_date: selectedEndDate}, {withCredentials: true});
@@ -35,7 +45,6 @@ export default function YearsEditPanel({year_id, refreshYears}) {
     const fetchYear = async(year_id) => {
         try {
             const response = await axios.get(`http://localhost:3001/schoolyears/${year_id}`, {withCredentials: true});
-            // console.log(response.data);
             setStartDate(response.data.start_date);
             selectEndDate(response.data.end_date);
         } catch(err) {
