@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { Student_Enrollment, Activities, Categories, Honor_List, Faculty_Moderators, Attendance, Users } = require('../models');
+const { Student_Enrollment, Activities, Categories, Honor_List, Faculty_Moderators, Attendance, Users, School_Years } = require('../models');
 const { isAuthenticated, hasRole } = require('../middleware/authMiddleware');
 const {FACULTY, ADMIN} = require('../config/roles.js');
 const nodemailer = require('nodemailer');
@@ -20,11 +20,18 @@ router.post("/enroll", isAuthenticated, async(req,res) => {
     const points = 0;
 
     try {
+            const activeYear = await School_Years.findOne({
+                where: {
+                    active:true
+                }
+            });
+
            const newEnrollment = await Student_Enrollment.create({
             student_id,
             activities_id,
             points,
-            approved: null
+            approved: null,
+            year_id: activeYear.year_id
         });
 
         const studentUser = await Users.findOne({
@@ -109,11 +116,12 @@ try {
   }
 });
 
-router.get("/enrolledactivities", isAuthenticated, async(req,res)=> {
+router.get("/enrolledactivities/:year_id", isAuthenticated, async(req,res)=> {
     try {
     const student_id = req.user.user_id;
+    const {year_id} = req.params;
 
-    const where = {student_id: Number(student_id)};
+    const where = {student_id: Number(student_id), year_id: Number(year_id)};
     const listOfActivities = await Student_Enrollment.findAll({
         where,
         include: [
@@ -134,13 +142,42 @@ router.get("/enrolledactivities", isAuthenticated, async(req,res)=> {
 }
 });
 
-router.get("/points", isAuthenticated, async(req,res)=> {
+// router.get("/enrolledactivities", isAuthenticated, async(req,res)=> {
+//     try {
+//     const student_id = req.user.user_id;
+
+//     const where = {student_id: Number(student_id)};
+//     const listOfActivities = await Student_Enrollment.findAll({
+//         where,
+//         include: [
+//             { 
+//                 model: Activities,
+//                 include: [{
+//                     model: Categories,
+//                     attributes: ['category_name'],
+//                 },
+//             ],
+//             },
+//         ],
+//     });
+//     res.json(listOfActivities);
+// } catch (err) {
+//     console.error(err);
+//     res.status(500).json({err: "Failed to retrieve activities"});
+// }
+// });
+
+
+router.get("/points/:year_id", isAuthenticated, async(req,res)=> {
+    const {year_id} = req.params;
+    console.log("Testing" + year_id);
     try {
         const student_id = req.user.user_id;
         const points = await Student_Enrollment.sum("points", {
             where: {
                 approved: true,
-                student_id
+                student_id,
+                year_id
             },
         });
 
@@ -158,6 +195,32 @@ router.get("/points", isAuthenticated, async(req,res)=> {
         res.status(500).json({err: "Failed to get points"});
     }
 })
+
+// router.get("/points", isAuthenticated, async(req,res)=> {
+//     try {
+//         const student_id = req.user.user_id;
+//         const points = await Student_Enrollment.sum("points", {
+//             where: {
+//                 approved: true,
+//                 student_id
+//             },
+//         });
+
+//         let honorPoints= await Honor_List.sum("points", {
+//             where: {
+//                 student_id
+//             },
+//         })
+
+//         if (honorPoints > 12) { honorPoints=12 }
+//         const totalPoints=points+honorPoints;
+//         res.json({points: totalPoints || 0});
+//     } catch (err) {
+//         console.error(err);
+//         res.status(500).json({err: "Failed to get points"});
+//     }
+// })
+
 
 router.put("/:student_id/:activities_id/approve", isAuthenticated, hasRole(ADMIN, FACULTY), async(req,res)=>{
     try {

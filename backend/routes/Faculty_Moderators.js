@@ -23,6 +23,34 @@ router.get("/by-user/:user_id", isAuthenticated, hasRole(FACULTY, ADMIN), async 
     }
 });
 
+router.get("/activities/:year_id", isAuthenticated, hasRole(FACULTY, ADMIN), async(req,res)=> {
+    try {
+        const faculty_id=req.user.user_id;
+        const {year_id} = req.params;
+
+        const where = {faculty_id: Number(faculty_id), year_id: Number(year_id)};
+        const moderatingActivities = await Faculty_Moderators.findAll({
+            where, 
+            include: [
+                {
+                    model: Activities,
+                    include: [{
+                        model: Student_Enrollment,
+                        include: [{
+                            model: Users,
+                            attributes: ['first_name', 'last_name'],
+                        }]
+                    },],
+                },
+            ],
+        });
+        res.json(moderatingActivities);
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({err: "Failed to retrieve activities"});
+    }
+});
+
 
 router.get("/activities", isAuthenticated, hasRole(FACULTY, ADMIN), async(req,res)=> {
     try {

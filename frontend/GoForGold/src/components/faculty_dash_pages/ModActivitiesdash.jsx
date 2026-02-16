@@ -10,15 +10,11 @@ export default function ModActivitiesDash() {
 
     const [activities, setActivities] = useState([]);
 
-    const fetchActivities = async() => {
-        const response = await axios.get("http://localhost:3001/facultymoderators/activities", 
+    const fetchActivities = async(year_id) => {
+        const response = await axios.get(`http://localhost:3001/facultymoderators/activities`, 
             {withCredentials: true});
         setActivities(response.data);
     }
-
-    useEffect(() => {
-        fetchActivities();
-    }, [])
     
     const enrolledStudents = activities.filter((act)=> act.activity_moderating_id === selectedActivity).flatMap((act)=> act.Activity.Student_Enrollments);
     
@@ -40,10 +36,40 @@ export default function ModActivitiesDash() {
         fetchActivities();
     }
 
+    const [years, setYears] = useState([]);
+    const fetchYears = async() => {
+        const response = await axios.get("http://localhost:3001/schoolyears", {withCredentials: true});
+        console.log(response.data);
+        setYears(response.data);
+    }
 
+    const [selectedYear, setSelectedYear]=useState("");
+    const fetchActiveYear = async() => {
+        const response = await axios.get("http://localhost:3001/schoolyears/activeyear", {withCredentials: true});
+        console.log(response.data);
+        setSelectedYear(response.data);
+    }
+
+    useEffect(() => {
+        fetchYears();
+        fetchActiveYear();
+        fetchActivities();
+    }, [])
 
     return (
         <div>
+            <Row className="mb-3">
+                <Col xs="3" lg="3">
+                <Form.Select value={selectedYear} onChange={(e)=>setSelectedYear(Number(e.target.value))}>
+                    <option value="">Select a Year</option>
+                        {years.map((year)=> (
+                            <option key ={year.year_id} value={year.year_id}>
+                                {year.name}
+                            </option>
+                        ))}
+                </Form.Select>
+                </Col>
+            </Row>
             <Row>
                 <Col xs={3}>
                     <Form className="form-inline">

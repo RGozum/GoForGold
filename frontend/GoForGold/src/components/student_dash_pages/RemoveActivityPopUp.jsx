@@ -1,7 +1,8 @@
 import {Button, Modal, Form} from "react-bootstrap";
 import React, {useState, useEffect} from 'react';
+import axios from 'axios';
 
-export default function RemoveActivityPop({activities_id, handleDelete}) {
+export default function RemoveActivityPop({activities_id, handleDelete, year_id}) {
     const [show, setShow] = useState(false);
 
     const handleClose = () => setShow(false);
@@ -12,11 +13,20 @@ export default function RemoveActivityPop({activities_id, handleDelete}) {
         handleDelete(activities_id);
         handleClose();
     }
-    
+
+    const [activeYear, setActiveYear]=useState("");
+    const fetchActiveYear = async() => {
+        const response = await axios.get("http://localhost:3001/schoolyears/activeyear", {withCredentials: true});
+        setActiveYear(response.data);
+    }
+
+    useEffect(() => {
+        fetchActiveYear();
+    }) 
     
     return (
         <>
-            <Button variant="dark" size="md" onClick={handleShow} className="delete-button">&times;</Button> 
+            <Button variant="dark" size="md" onClick={handleShow} disabled={activeYear!=year_id} className="delete-button">&times;</Button> 
 
             <Modal 
                 show={show}

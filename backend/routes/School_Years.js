@@ -9,6 +9,15 @@ router.get("/", isAuthenticated, async(req,res)=> {
     res.json(listOfYears);
 });
 
+router.get("/activeyear", isAuthenticated, async(req,res)=> {
+    const year = await School_Years.findOne({
+        where: {
+            active: true
+        }
+    })
+    res.json(year.year_id);
+});
+
 router.get("/:year_id", isAuthenticated, hasRole(ADMIN), async(req,res)=> {
     const year_id = req.params;
     const year = await School_Years.findOne({

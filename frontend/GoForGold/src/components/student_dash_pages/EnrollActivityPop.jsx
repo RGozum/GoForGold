@@ -35,7 +35,6 @@ export default function EnrollActivityPop({enrollActivity}) {
    useEffect(() => {
         const fetchActivities = async () => {
             if (!selectedCategory) return;
-
             const response = await axios.get(
                 `http://localhost:3001/activities/${selectedCategory}/active`
             );
