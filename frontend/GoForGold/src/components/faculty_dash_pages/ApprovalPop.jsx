@@ -2,7 +2,7 @@ import {Button, Modal, Row, Col, Form} from "react-bootstrap";
 import React, {useState, useEffect} from 'react';
 import axios from 'axios';
 
-export default function AddActivityPop({student_id, activities_id, onUpdate}) {
+export default function AddActivityPop({student_id, activities_id, onUpdate, year_id}) {
     const [show, setShow] = useState(false);
  
     const handleClose = () => setShow(false);
@@ -13,14 +13,24 @@ export default function AddActivityPop({student_id, activities_id, onUpdate}) {
     const handleApprove = async (approved) => {
         await axios.put(`http://localhost:3001/studentenrollment/${student_id}/${activities_id}/approve`, 
             {approved}, {withCredentials: true});
-        onUpdate?.();
+        onUpdate(year_id);
         handleClose();
     }
+
+    const [activeYear, setActiveYear]=useState("");
+    const fetchActiveYear = async() => {
+        const response = await axios.get("http://localhost:3001/schoolyears/activeyear", {withCredentials: true});
+        setActiveYear(response.data);
+    }
+
+    useEffect(() => {
+        fetchActiveYear();
+    }) 
 
 
     return (
         <>
-        <Button variant="dark" size="lg" lg={3} onClick={handleShow} className="approve-button">
+        <Button variant="dark" size="lg" lg={3} onClick={handleShow} disabled={activeYear!=year_id} className="approve-button">
             Approve/Deny
         </Button>
 

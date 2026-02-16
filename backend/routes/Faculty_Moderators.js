@@ -28,7 +28,7 @@ router.get("/activities/:year_id", isAuthenticated, hasRole(FACULTY, ADMIN), asy
         const faculty_id=req.user.user_id;
         const {year_id} = req.params;
 
-        const where = {faculty_id: Number(faculty_id), year_id: Number(year_id)};
+        const where = {faculty_id: Number(faculty_id)};
         const moderatingActivities = await Faculty_Moderators.findAll({
             where, 
             include: [
@@ -36,6 +36,8 @@ router.get("/activities/:year_id", isAuthenticated, hasRole(FACULTY, ADMIN), asy
                     model: Activities,
                     include: [{
                         model: Student_Enrollment,
+                        where: year_id ? {year_id: Number(year_id)} : undefined,
+                        required: false,
                         include: [{
                             model: Users,
                             attributes: ['first_name', 'last_name'],

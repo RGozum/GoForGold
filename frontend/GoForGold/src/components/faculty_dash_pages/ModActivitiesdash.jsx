@@ -7,54 +7,56 @@ import './FacultyDash.css';
 
 export default function ModActivitiesDash() {
     const [selectedActivity, setSelectedActivity]=useState("");
-
     const [activities, setActivities] = useState([]);
 
     const fetchActivities = async(year_id) => {
-        const response = await axios.get(`http://localhost:3001/facultymoderators/activities`, 
+        const response = await axios.get(`http://localhost:3001/facultymoderators/activities/${year_id}`, 
             {withCredentials: true});
         setActivities(response.data);
     }
     
     const enrolledStudents = activities.filter((act)=> act.activity_moderating_id === selectedActivity).flatMap((act)=> act.Activity.Student_Enrollments);
-    
-    const addPoints = async(student_id, activities_id, currentPoints) => {
+
+    const addPoints = async(student_id, activities_id, currentPoints, selectedYear) => {
         let point=currentPoints+1;
         if (point>5) {
             point=5
         }
         const response = await axios.put(`http://localhost:3001/studentenrollment/${student_id}/${activities_id}/editpoints`, {point}, {withCredentials:true});
-        fetchActivities();
+        fetchActivities(selectedYear);
     }
 
-    const minusPoints = async(student_id, activities_id, currentPoints) => {
+    const minusPoints = async(student_id, activities_id, currentPoints, selectedYear) => {
         let point=currentPoints-1;
         if (point<0) {
             point=0
         }
         const response = await axios.put(`http://localhost:3001/studentenrollment/${student_id}/${activities_id}/editpoints`, {point}, {withCredentials:true});
-        fetchActivities();
+        fetchActivities(selectedYear);
     }
 
     const [years, setYears] = useState([]);
     const fetchYears = async() => {
         const response = await axios.get("http://localhost:3001/schoolyears", {withCredentials: true});
-        console.log(response.data);
         setYears(response.data);
     }
 
     const [selectedYear, setSelectedYear]=useState("");
+    const [activeYear, setActiveYear]=useState("");
     const fetchActiveYear = async() => {
         const response = await axios.get("http://localhost:3001/schoolyears/activeyear", {withCredentials: true});
-        console.log(response.data);
         setSelectedYear(response.data);
+        setActiveYear(response.data);
     }
 
     useEffect(() => {
         fetchYears();
         fetchActiveYear();
-        fetchActivities();
     }, [])
+
+    useEffect(()=> {
+        fetchActivities(selectedYear);
+    }, [selectedYear]);
 
     return (
         <div>
@@ -96,22 +98,23 @@ export default function ModActivitiesDash() {
                                 <Row className="align-items-center text-center">
                                     <Col xs={3} md={3} className="text-center name-item">{enroll.User.first_name} {enroll.User.last_name}</Col>
                                     <Col xs={5} md={3}>{enroll.approved===null ? (
-                                        <ApprovalPop student_id={enroll.student_id} activities_id={enroll.activities_id} onUpdate={fetchActivities}/>) : 
+                                        <ApprovalPop student_id={enroll.student_id} activities_id={enroll.activities_id} onUpdate={fetchActivities} year_id={selectedYear}/> ) : 
                                         enroll.approved === true ? (
                                         <div className="name-item">Approved</div>) : (
                                         <div className="name-item">Denied</div>)}
                                     </Col>
                                     <Col xs={5} md={3} className="points-item">
                                     <ButtonGroup className="gap-3 justify-content-center">
-                                        <Button variant="outline-dark" disabled={enroll.approved===false || enroll.approved===null} onClick={()=>addPoints(enroll.student_id, enroll.activities_id, enroll.points)}>^</Button>
+                                        <Button variant="outline-dark" disabled={enroll.approved===false || enroll.approved===null || enroll.year_id !=activeYear} onClick={()=>addPoints(enroll.student_id, enroll.activities_id, enroll.points, selectedYear)}>^</Button>
                                         <div>
                                             {enroll.approved===false || enroll.approved===null ? (<p>Not approved.</p>) : (<p>{enroll.points} points.</p>)}
                                         </div>
-                                        <Button variant="outline-dark" disabled={enroll.approved===false || enroll.approved===null} onClick={()=>minusPoints(enroll.student_id, enroll.activities_id, enroll.points)}>v</Button>
+                                        <Button variant="outline-dark" disabled={enroll.approved===false || enroll.approved===null || enroll.year_id !=activeYear} onClick={()=>minusPoints(enroll.student_id, enroll.activities_id, enroll.points, selectedYear)}>v</Button>
                                     </ButtonGroup>
                                     </Col>
                                     <Col xs={2} md={2} >
-                                        <EditApprovalPop student_id={enroll.student_id} activities_id={enroll.activities_id} onUpdate={fetchActivities}/>
+                                        <EditApprovalPop student_id={enroll.student_id} 
+                                            activities_id={enroll.activities_id} onUpdate={fetchActivities} year_id={selectedYear}/>
                                     </Col>
                                 </Row>
                             </li>
