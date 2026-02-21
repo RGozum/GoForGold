@@ -17,6 +17,10 @@ module.exports = (sequelize, DataTypes) => {
             allowNull: false,
             primaryKey: true
         }, 
+        year_id: {
+            type: DataTypes.INTEGER,
+            allowNull: true,
+        }
     }, {
         freezeTableName: true,
         tableName: 'attendance',

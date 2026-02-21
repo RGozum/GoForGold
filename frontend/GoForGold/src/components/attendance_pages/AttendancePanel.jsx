@@ -43,11 +43,17 @@ export default function AttendancePanel() {
         console.log(response.data)
     }
 
-    const fetchAttendance = async() => {
-        const response = await axios.get("http://localhost:3001/attendance/attendancedata",
+
+    
+        useEffect(()=> {
+            fetchActivities();
+        }, []);
+
+    const fetchAttendance = async(year_id) => {
+        const response = await axios.get(`http://localhost:3001/attendance/attendancedata/${year_id}`,
             {params: {startDate: formatYYYYMMDD(sundayDate),
             activity_id: selectedActivity
-        }}, {
+        }, 
             withCredentials:true
         });
         setDates(response.data.dates);
@@ -55,16 +61,12 @@ export default function AttendancePanel() {
         console.log(response.data);
     };
     
-    useEffect(() => {
-        fetchActivities();
-    }, []);
-    
     useEffect(()=> {
         if (selectedActivity) fetchAttendance();
     }, [selectedActivity,sundayDate]);
 
 
-    const handleCheckboxChange = async (student_id, date, oldValue, idx) => {
+    const handleCheckboxChange = async (student_id, date, oldValue, idx, selectedYear) => {
         const newValue = !oldValue;
 
         // Update local state so UI changes immediately
@@ -89,7 +91,8 @@ export default function AttendancePanel() {
                     student_id,
                     activity_id: selectedActivity,
                     date,
-                    value: newValue
+                    value: newValue, 
+                    year_id: selectedYear
                 },
                 { withCredentials: true }
             );
@@ -118,6 +121,18 @@ export default function AttendancePanel() {
 
 return (
     <div>
+        <Row className="mb-3">
+            <Col xs="3" lg="3">
+            <Form.Select value={selectedYear} onChange={(e)=>setSelectedYear(Number(e.target.value))}>
+                <option value="">Select a Year</option>
+                    {years.map((year)=> (
+                        <option key ={year.year_id} value={year.year_id}>
+                            {year.name}
+                        </option>
+                    ))}
+            </Form.Select>
+            </Col>
+        </Row>
         <Row>
             <Col md={3}>
                 <Form.Select 
@@ -181,7 +196,8 @@ return (
                                     student.student_id,
                                     dates[idx],
                                     value,
-                                    idx
+                                    idx,
+                                    selectedYear
                                 )
                             } />
                     </td>
