@@ -33,8 +33,6 @@ export default function AttendancePanel() {
         return sunday;
     })
 
-    
-
     const fetchActivities = async() => {
         const response = await axios.get("http://localhost:3001/facultymoderators/activities", 
             {withCredentials: true});
@@ -43,11 +41,31 @@ export default function AttendancePanel() {
         console.log(response.data)
     }
 
-
+    const [years, setYears] = useState([]);
+        const fetchYears = async() => {
+            const response = await axios.get("http://localhost:3001/schoolyears", {withCredentials: true});
+            setYears(response.data);
+        }
     
-        useEffect(()=> {
-            fetchActivities();
+        const [selectedYear, setSelectedYear]=useState("");
+        const [activeYear, setActiveYear]=useState("");
+        const fetchActiveYear = async() => {
+            const response = await axios.get("http://localhost:3001/schoolyears/activeyear", {withCredentials: true});
+            setSelectedYear(response.data);
+            setActiveYear(response.data);
+        }
+    
+        useEffect(() => {
+            fetchYears();
+            fetchActiveYear();
         }, []);
+
+        const selectedMin = new Date(selectedYear && years[selectedYear-1].start_date);
+        const selectedMax = new Date(selectedYear && years[selectedYear-1].end_date);
+
+        useEffect(()=> {
+            fetchActivities(selectedYear);
+        }, [selectedYear]);
 
     const fetchAttendance = async(year_id) => {
         const response = await axios.get(`http://localhost:3001/attendance/attendancedata/${year_id}`,
@@ -61,9 +79,15 @@ export default function AttendancePanel() {
         console.log(response.data);
     };
     
+    useEffect(() => {
+        fetchActivities();
+    }, []);
+    
     useEffect(()=> {
-        if (selectedActivity) fetchAttendance();
-    }, [selectedActivity,sundayDate]);
+        if (selectedActivity && selectedYear && sundayDate) {
+            fetchAttendance(selectedYear);
+        }
+    }, [selectedActivity,sundayDate, selectedYear]);
 
 
     const handleCheckboxChange = async (student_id, date, oldValue, idx, selectedYear) => {
@@ -101,6 +125,27 @@ export default function AttendancePanel() {
         }
     };
 
+    useEffect(() => {
+        if (!selectedYear || !years) return;
+
+        const minDate = new Date(years[selectedYear - 1].start_date);
+        const maxDate = new Date(years[selectedYear - 1].end_date);
+
+        if (!selectedDate || selectedDate < minDate || selectedDate > maxDate) {
+            setSelectedDate(minDate);
+
+            const sunday = new Date(minDate);
+            sunday.setDate(minDate.getDate() - minDate.getDay());
+            setSundayDate(sunday);
+        }
+        }, [selectedYear, years]);
+
+    useEffect(()=> {
+        if (selectedMin > selectedDate || selectedMax < selectedDate) {
+            setSelectedDate(selectedMin);
+        }
+    }, [selectedDate, selectedMin])
+
     const subtractToSunday=async()=> {
         setSundayDate(prev => {
             const newDate = new Date(prev);
@@ -114,11 +159,10 @@ export default function AttendancePanel() {
         setSundayDate(prev => {
             const newDate = new Date(prev);
             newDate.setDate(newDate.getDate()+7);
-        return newDate;
+            return newDate;
         }
         )
     }
-
 return (
     <div>
         <Row className="mb-3">
@@ -152,6 +196,8 @@ return (
                     toggleCalendarOnIconClick
                     selected={selectedDate}
                     onChange={selectDate}
+                    minDate={years ? selectedMin : null}
+                    maxDate={years ? selectedMax : null}
                 />
             </Col>
             

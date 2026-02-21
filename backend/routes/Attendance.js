@@ -18,6 +18,7 @@ router.get("/attendancedata/:year_id", async(req,res) => {
   const startDate = req.query.startDate;
 
   let currentDate = new Date(startDate);
+  currentDate.setHours(0,0,0,0);
   console.log("\n \n Start Date:" + startDate);
   console.log("Current Date:" + currentDate);
 
