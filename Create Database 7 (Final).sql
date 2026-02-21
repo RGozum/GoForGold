@@ -153,13 +153,18 @@ CREATE TABLE IF NOT EXISTS `goforgolddb`.`attendance` (
   `attendance_date` DATE NOT NULL,
   `activity_id_fk` INT NOT NULL,
   `student_id` INT NOT NULL,
+  `year_id_fk` INT NULL DEFAULT NULL,
   PRIMARY KEY (`student_id`, `activity_id_fk`, `attendance_date`),
   INDEX `student_id_idx` (`student_id` ASC) VISIBLE,
   INDEX `activity_id_idx` (`activity_id_fk` ASC) VISIBLE,
+  INDEX `fk_year_enrollment` (`year_id_fk` ASC) VISIBLE,
   CONSTRAINT `fk_attendance_enrollment`
     FOREIGN KEY (`student_id` , `activity_id_fk`)
     REFERENCES `goforgolddb`.`student_enrollment` (`student_id` , `activities_id`)
-    ON DELETE CASCADE)
+    ON DELETE CASCADE,
+  CONSTRAINT `fk_year_enrollment`
+    FOREIGN KEY (`year_id_fk`)
+    REFERENCES `goforgolddb`.`student_enrollment` (`year_id`))
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci;
