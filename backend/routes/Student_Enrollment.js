@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { Student_Enrollment, Activities, Categories, Honor_List, Faculty_Moderators, Attendance, Users, School_Years } = require('../models');
+const { Student_Enrollment, Activities, Categories, Honor_List, Faculty_Moderators, Attendance, Users, School_Years, Honor_Roll } = require('../models');
 const { isAuthenticated, hasRole } = require('../middleware/authMiddleware');
 const {FACULTY, ADMIN} = require('../config/roles.js');
 const nodemailer = require('nodemailer');
@@ -185,9 +185,18 @@ router.get("/points/:year_id", isAuthenticated, async(req,res)=> {
             where: {
                 student_id
             },
+            include: [
+                {model: Honor_Roll,
+                    attributes: [],
+                    where: {
+                        year_id_fk: year_id,
+                    }
+                }
+            ]
         })
 
         if (honorPoints > 12) { honorPoints=12 }
+        if (honorPoints == null) { honorPoints = 0}
         const totalPoints=points+honorPoints;
         res.json({points: totalPoints || 0});
     } catch (err) {

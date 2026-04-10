@@ -190,7 +190,7 @@ router.post("/update-attendance", isAuthenticated, hasRole(ADMIN, FACULTY), asyn
       attendance_date: date,
       activity_id_fk: activity_id,
       student_id,
-      year_id_fk
+      year_id_fk: Number(year_id)
     })
     await newAttendance.save();
     console.log("Successful!")
@@ -202,7 +202,6 @@ router.post("/update-attendance", isAuthenticated, hasRole(ADMIN, FACULTY), asyn
         attendance_date: date,
         year_id_fk: Number(year_id)
        },
-       
     });
     console.log("Successful!")
     return res.status(200).json({ message: "Attendance deleted successfully" });

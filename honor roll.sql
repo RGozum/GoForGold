@@ -1,3 +1,4 @@
+USE goforgolddb;
 /*
 -- Query: SELECT * FROM goforgolddb.honor_roll
 LIMIT 0, 1000

@@ -17,7 +17,7 @@ module.exports = (sequelize, DataTypes) => {
             allowNull: false,
             primaryKey: true
         }, 
-        year_id: {
+        year_id_fk: {
             type: DataTypes.INTEGER,
             allowNull: true,
         }
