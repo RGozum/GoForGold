@@ -87,27 +87,12 @@ router.post("/enroll", isAuthenticated, async(req,res) => {
  
 });
 
-router.delete("/:activities_id/delete", isAuthenticated, async(req,res)=> {
+router.delete("/:activities_id/:year_id/delete", isAuthenticated, async(req,res)=> {
     const student_id=req.user.user_id;
-    const {activities_id}=req.params;
+    const {activities_id, year_id}=req.params;
 try {
-
-    const attendanceRecord = await Attendance.findOne({
-        where: {
-            student_id,
-            activity_id_fk: activities_id
-        }
-    });
-    if (attendanceRecord) {
-    await Attendance.destroy({
-        where: {
-            student_id,
-            activity_id_fk: activities_id
-        }
-    });
-    }; 
     await Student_Enrollment.destroy({
-      where: { activities_id, student_id },
+      where: { activities_id, student_id, year_id: Number(year_id) },
     });
     return res.status(200).json({ message: "Activity deleted successfully" });
   } catch (error) {

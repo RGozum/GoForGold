@@ -158,9 +158,9 @@ CREATE TABLE IF NOT EXISTS `goforgolddb`.`attendance` (
   INDEX `student_id_idx` (`student_id` ASC) VISIBLE,
   INDEX `activity_id_idx` (`activity_id_fk` ASC) VISIBLE,
   INDEX `fk_year_enrollment` (`year_id_fk` ASC) VISIBLE,
-  CONSTRAINT `fk_attendance_enrollment`
-    FOREIGN KEY (`student_id` , `activity_id_fk`)
-    REFERENCES `goforgolddb`.`student_enrollment` (`student_id` , `activities_id`)
+  CONSTRAINT `fk_attendance_enrollment_full`
+    FOREIGN KEY (`student_id` , `activity_id_fk`,`year_id_fk`)
+    REFERENCES `goforgolddb`.`student_enrollment` (`student_id` , `activities_id`,`year_id`)
     ON DELETE CASCADE,
   CONSTRAINT `fk_year_enrollment`
     FOREIGN KEY (`year_id_fk`)

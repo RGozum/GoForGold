@@ -10,7 +10,7 @@ export default function RemoveActivityPop({activities_id, handleDelete, year_id}
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        handleDelete(activities_id);
+        handleDelete(activities_id, year_id);
         handleClose();
     }
 

@@ -27,6 +27,10 @@ const defineAssociations = (db) => {
         foreignKey: 'student_id'
     });
 
+    Student_Enrollment.hasMany(School_Years, {
+        foreignKey: 'year_id'
+    });
+
     Users.belongsToMany(Activities, {
         through: Student_Enrollment,
         foreignKey: 'student_id',
@@ -99,7 +103,8 @@ const defineAssociations = (db) => {
         { foreignKey: 'activity_id_fk', 
             as: 'activities_id' });
     Attendance.belongsTo(Student_Enrollment, {
-        foreignKey: 'year_id_fk'
+        foreignKey: 'year_id_fk', 
+        otherKey: 'year_id'
     });
 
     Users.hasMany(Attendance, { 

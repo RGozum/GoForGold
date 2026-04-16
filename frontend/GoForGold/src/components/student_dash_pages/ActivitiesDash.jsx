@@ -48,8 +48,8 @@ export default function ActivitiesDash() {
         fetchPoints(selectedYear);
     }
 
-    const onDelete = async (activities_id) => {
-        await axios.delete(`http://localhost:3001/studentenrollment/${activities_id}/delete`,{
+    const onDelete = async (activities_id, year_id) => {
+        await axios.delete(`http://localhost:3001/studentenrollment/${activities_id}/${year_id}/delete`,{
             withCredentials: true,
         });
 
